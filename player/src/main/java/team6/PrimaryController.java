@@ -9,17 +9,25 @@ import javafx.scene.media.MediaView;
 
 public class PrimaryController {
 
-    private static Media currentMedia;
+    private Media currentMedia;
+    private static String current_path;
 
-    MediaView mediaview = (MediaView) VideoPlayer.getScene().lookup("#mediaview");
+    @FXML
+    MediaView mediaview;
 
     @FXML
     private void switchToSecondary() throws IOException {
         VideoPlayer.setRoot("secondary");
     }
 
-    public static void setCurrentVideo(String path) {
-        currentMedia = new Media(new File(path).toURI().toASCIIString());
+    @FXML
+    public void initialize() {
+        currentMedia = new Media(new File(current_path).toURI().toASCIIString());
         MediaPlayer mediaplayer = new MediaPlayer(currentMedia);
+        mediaview.setMediaPlayer(mediaplayer);
+    }
+
+    public static void setPath(String path) {
+        current_path = path;
     }
 }

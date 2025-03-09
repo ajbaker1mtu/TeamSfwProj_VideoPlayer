@@ -27,7 +27,7 @@ public class SecondaryController {
             if(file != null) {
                 //primaryController now has the file
                 System.out.println(file.getAbsolutePath() + " selected"); //remove eventually
-                PrimaryController.setCurrentVideo(file.getAbsolutePath());
+                PrimaryController.setPath(file.getAbsolutePath());
             }
         }
     }
