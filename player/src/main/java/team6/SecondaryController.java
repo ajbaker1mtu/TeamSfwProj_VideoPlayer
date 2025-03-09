@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.scene.control.Button;
 
 public class SecondaryController {
 
