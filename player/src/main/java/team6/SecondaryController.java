@@ -27,8 +27,9 @@ public class SecondaryController {
             File file = fc.showOpenDialog(stage);
             if(file != null) {
                 //temporary
-                //replace this with a way to display the video
-                System.out.println(file.getAbsolutePath() + " selected");
+                //primaryController now has the file
+                System.out.println(file.getAbsolutePath() + " selected"); //remove eventually
+                PrimaryController.setCurrentVideo(file.getAbsolutePath());
             }
         }
     }

@@ -36,6 +36,7 @@ public class VideoPlayer extends Application {
         VideoPlayer.setRoot("primary");
     }
 
+    //used for file opener
     public static Scene getScene() {
         return scene;
     }
