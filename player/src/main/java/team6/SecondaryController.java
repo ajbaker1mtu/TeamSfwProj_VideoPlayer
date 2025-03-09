@@ -26,7 +26,6 @@ public class SecondaryController {
             fc.setInitialDirectory(new File("C:\\"));
             File file = fc.showOpenDialog(stage);
             if(file != null) {
-                //temporary
                 //primaryController now has the file
                 System.out.println(file.getAbsolutePath() + " selected"); //remove eventually
                 PrimaryController.setCurrentVideo(file.getAbsolutePath());
