@@ -12,7 +12,7 @@
    <children>
       <Label text="Primary View" />
       <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Switch to Secondary View" />
-      <MediaView fitHeight="200.0" fitWidth="200.0" />
+      <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" />
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="60.0" text="00:00:00" />
