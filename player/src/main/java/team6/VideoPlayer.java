@@ -31,11 +31,6 @@ public class VideoPlayer extends Application {
         return fxmlLoader.load();
     }
 
-    @FXML
-    private void switchToPrimary() throws IOException {
-        VideoPlayer.setRoot("primary");
-    }
-
     //used for file opener
     public static Scene getScene() {
         return scene;
