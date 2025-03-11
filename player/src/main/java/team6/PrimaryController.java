@@ -38,6 +38,7 @@ public class PrimaryController {
         mediaplayer = new MediaPlayer(currentMedia);
         mediaview.setMediaPlayer(mediaplayer);
 
+        // Resizes the video. Still a bit bugged will fix later
         Scene size = VideoPlayer.getScene();
         mediaview.fitWidthProperty().bind(size.widthProperty());
         mediaview.fitHeightProperty().bind(size.heightProperty());
