@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 
-<VBox alignment="CENTER" prefHeight="443.0" prefWidth="611.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
+<VBox alignment="CENTER" prefHeight="589.0" prefWidth="793.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
    <children>
       <Label style="-fx-text-fill: #ffffff;" text="Primary View" />
       <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Switch to Secondary View" />
@@ -20,13 +20,17 @@
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="-00:00:00" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="43.0" prefWidth="571.0" spacing="10.0">
+      <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Button mnemonicParsing="false" text="&lt;- 10" />
-            <Button mnemonicParsing="false" text="Play" />
-            <Button mnemonicParsing="false" text="10 -&gt;" />
+            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="636.0" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" text="&lt;- 10" />
+                  <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
+                  <Button mnemonicParsing="false" text="10 -&gt;" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

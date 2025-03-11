@@ -5,5 +5,6 @@ module team6 {
     requires javafx.media;
 
     opens team6 to javafx.fxml;
+
     exports team6;
 }
