@@ -34,6 +34,11 @@ public class PrimaryController {
 
     @FXML
     public void initialize() {
+        // This if statement lets us switch views without selecting a file.
+        if (current_path == null || current_path.isEmpty()) {
+            System.out.println("Error: No media file selected.");
+            return;
+        }
         currentMedia = new Media(new File(current_path).toURI().toASCIIString());
         mediaplayer = new MediaPlayer(currentMedia);
         mediaview.setMediaPlayer(mediaplayer);
