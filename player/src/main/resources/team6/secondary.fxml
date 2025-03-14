@@ -6,12 +6,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Box?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.SecondaryController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.SecondaryController">
     <children>
-        <Label text="Secondary View" />
+        <Label text="Select Video File" />
       <Box depth="100" height="100" width="100" />
-        <Button fx:id="secondaryButton" onAction="#switchToPrimary" text="Switch to Primary View" />
-      <Button fx:id="openfilebutton" mnemonicParsing="false" onAction="#openFile" text="Open File" />
+        <Button fx:id="secondaryButton" onAction="#switchToPrimary" text="Play Video" />
+      <Button fx:id="openfilebutton" mnemonicParsing="false" onAction="#openFile" text="Open Video File" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

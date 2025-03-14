@@ -8,25 +8,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 
-<VBox alignment="CENTER" prefHeight="589.0" prefWidth="793.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
    <children>
-      <Label style="-fx-text-fill: #ffffff;" text="Primary View" />
-      <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Switch to Secondary View" />
-      <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" />
+      <Label style="-fx-text-fill: #ffffff;" text="Video Player" />
+      <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Select Video File" />
+      <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#buttonPlay" />
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
             <Slider prefHeight="14.0" prefWidth="415.0" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="-00:00:00" />
+            <Label fx:id="videoTime" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
          </children>
       </HBox>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
             <HBox alignment="CENTER" prefHeight="64.0" prefWidth="636.0" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" text="&lt;- 10" />
+                  <Button fx:id="backward10" mnemonicParsing="false" text="&lt;- 10" />
                   <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
-                  <Button mnemonicParsing="false" text="10 -&gt;" />
+                  <Button fx:id="forward10" mnemonicParsing="false" onMouseClicked="#videoTime" text="10 -&gt;" />
                </children>
             </HBox>
          </children>

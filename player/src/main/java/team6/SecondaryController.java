@@ -19,14 +19,14 @@ public class SecondaryController {
     @FXML
     private void openFile() throws IOException {
         Window window = VideoPlayer.getScene().getWindow();
-        if(window instanceof Stage) {
+        if (window instanceof Stage) {
             Stage stage = (Stage) window;
             fc.setTitle("Choose Video to play");
             fc.setInitialDirectory(new File("C:\\"));
             File file = fc.showOpenDialog(stage);
-            if(file != null) {
-                //primaryController now has the file
-                System.out.println(file.getAbsolutePath() + " selected"); //remove eventually
+            if (file != null) {
+                // primaryController now has the file
+                System.out.println(file.getAbsolutePath() + " selected"); // remove eventually
                 PrimaryController.setPath(file.getAbsolutePath());
             }
         }
