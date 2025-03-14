@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.scene.control.Button;
 
 public class SecondaryController {
 
@@ -26,9 +25,9 @@ public class SecondaryController {
             fc.setInitialDirectory(new File("C:\\"));
             File file = fc.showOpenDialog(stage);
             if(file != null) {
-                //temporary
-                //replace this with a way to display the video
-                System.out.println(file.getAbsolutePath() + " selected");
+                //primaryController now has the file
+                System.out.println(file.getAbsolutePath() + " selected"); //remove eventually
+                PrimaryController.setPath(file.getAbsolutePath());
             }
         }
     }

@@ -7,8 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser;
-import java.io.File;
 
 /**
  * JavaFX App
@@ -33,11 +31,7 @@ public class VideoPlayer extends Application {
         return fxmlLoader.load();
     }
 
-    @FXML
-    private void switchToPrimary() throws IOException {
-        VideoPlayer.setRoot("primary");
-    }
-
+    //used for file opener
     public static Scene getScene() {
         return scene;
     }
