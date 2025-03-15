@@ -6,12 +6,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="422.0" prefWidth="373.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.SecondaryController">
+<VBox alignment="CENTER" prefHeight="422.0" prefWidth="373.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.SecondaryController">
     <children>
         <Label text="Select Video File" />
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <ComboBox fx:id="videoDrop" nodeOrientation="LEFT_TO_RIGHT" prefWidth="150.0" />
+            <ComboBox fx:id="videoDrop" nodeOrientation="LEFT_TO_RIGHT" prefWidth="150.0" promptText="Open Recent Video" visibleRowCount="5" />
          </children>
       </VBox>
         <Button fx:id="secondaryButton" onAction="#switchToPrimary" text="Play Video" />
