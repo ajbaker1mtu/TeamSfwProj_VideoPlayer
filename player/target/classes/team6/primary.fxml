@@ -26,7 +26,7 @@
                <children>
                   <Button fx:id="backward10" mnemonicParsing="false" text="&lt;- 10" />
                   <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
-                  <Button fx:id="forward10" mnemonicParsing="false" onMouseClicked="#videoTime" text="10 -&gt;" />
+                  <Button fx:id="forward10" mnemonicParsing="false" text="10 -&gt;" />
                </children>
             </HBox>
          </children>
