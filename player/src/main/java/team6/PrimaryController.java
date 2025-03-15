@@ -1,14 +1,19 @@
 package team6;
 
-import java.io.IOException;
-import javafx.fxml.FXML;
 import java.io.File;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
+import java.io.IOException;
+
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.util.Duration;
+
 
 public class PrimaryController {
 
@@ -20,6 +25,9 @@ public class PrimaryController {
     @FXML
     MediaPlayer mediaplayer;
 
+    @FXML
+    private Slider slider;
+
     private Media currentMedia;
     private static String current_path;
     private boolean isPlayed = false;
@@ -30,7 +38,9 @@ public class PrimaryController {
 
     // Total seconds of the video
     @FXML
-    Label videoTime;
+    private Label videoTime;
+    @FXML 
+    private Label videoTimeNeg;
 
     // Skipping buttons
     @FXML
@@ -44,9 +54,12 @@ public class PrimaryController {
         // Moves root to the secondary view
         VideoPlayer.setRoot("secondary");
 
-        // Stops video
+        // Stops video 
         isPlayed = false;
-        mediaplayer.stop();
+        if (current_path != null){
+            mediaplayer.stop();
+        }
+        
     }
 
     @FXML
@@ -76,72 +89,106 @@ public class PrimaryController {
         // Preserves the ratio of the video
         mediaview.setPreserveRatio(true);
 
-        // TODO
-        // Should get video time and put it in the label after the slider, but it
-        // doesn't
-        videoTime();
+        // Creates a listener to check if the slider has been moved and updates it 
+        mediaplayer.currentTimeProperty().addListener(((obvValue, oldVal, newVal) ->{
+            if(!slider.isValueChanging()){
+                slider.setValue(newVal.toSeconds());
+                vidTime(slider.getValue(), videoTimeNeg);
+            }
+        }));
+
+        // When the media player is started run this function
+        mediaplayer.setOnReady(() -> {
+            Duration totalDuration = currentMedia.getDuration();
+            slider.setMax(totalDuration.toSeconds());
+            vidTime(currentMedia.getDuration().toSeconds(), videoTime);
+        });
+
+        // Handle slider dragging (update video time)
+        slider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            vidTime(newVal.doubleValue(), videoTimeNeg);
+        });
+
+        // Seek when user releases the slider
+        slider.setOnMouseReleased(event -> {
+            mediaplayer.seek(Duration.seconds(slider.getValue()));
+        });
     }
 
+    /**
+     * Formats and updates the time labels
+     * @param value The time value in seconds
+     * @param video the label to update
+     */
+    @FXML
+    public void vidTime(double value, Label video){
+        int timeDouble = (int) value;
+        int minutes = timeDouble / 60;
+        int seconds = timeDouble % 60;
+        String formattedTime = minutes + ":" + String.format("%02d", seconds);
+        video.setText(formattedTime);
+
+    }
     /**
      * This function sets the text of the total time label to the total time of the
      * video playing
      */
-    @FXML
-    public void videoTime() {
-        // Total seconds of the video stored
-        double totalSeconds = Math.floor(currentMedia.getDuration().toSeconds());
-        int totalMinutes = 0, totalHours = 0;
+    // @FXML
+    // public void videoTime() {
+    //     // Total seconds of the video stored
+    //     double totalSeconds = Math.floor(currentMedia.getDuration().toSeconds());
+    //     int totalMinutes = 0, totalHours = 0;
 
-        // Checks if seconds are 60 or above
-        if (totalSeconds >= 60) {
-            // Convert to minutes and seconds
-            totalMinutes = (int) Math.floor(totalSeconds / 60);
-            totalSeconds = totalSeconds % 60;
-        }
+    //     // Checks if seconds are 60 or above
+    //     if (totalSeconds >= 60) {
+    //         // Convert to minutes and seconds
+    //         totalMinutes = (int) Math.floor(totalSeconds / 60);
+    //         totalSeconds = totalSeconds % 60;
+    //     }
 
-        // Checks if minutes are 60 or above
-        if (totalMinutes >= 60) {
-            // Convert to hours and minutes
-            totalHours = (int) Math.floor(totalMinutes / 60);
-            totalMinutes = totalMinutes % 60;
-        }
+    //     // Checks if minutes are 60 or above
+    //     if (totalMinutes >= 60) {
+    //         // Convert to hours and minutes
+    //         totalHours = (int) Math.floor(totalMinutes / 60);
+    //         totalMinutes = totalMinutes % 60;
+    //     }
 
-        // Time that will be formatted correctly
-        String time = formatTime(totalSeconds, totalMinutes, totalHours);
+    //     // Time that will be formatted correctly
+    //     String time = formatTime(totalSeconds, totalMinutes, totalHours);
 
-        // Sets time in label
-        videoTime.setText(time);
+    //     // Sets time in label
+    //     videoTime.setText(time);
 
-    }
+    // }
 
-    /**
-     * This function takes in the seconds, minutes, and hours of a video and outputs
-     * the correct formatting of it
-     * 
-     * @param tS Second(s) on the video
-     * @param tM Minute(s) on the video
-     * @param tH Hour(s) on the video
-     * @return Time with correct formatting
-     */
-    private String formatTime(double tS, int tM, int tH) {
-        String ret = "";
-        if (tH < 10) {
-            ret += "0";
-        }
-        ret += tH + ":";
+    // /**
+    //  * This function takes in the seconds, minutes, and hours of a video and outputs
+    //  * the correct formatting of it
+    //  * 
+    //  * @param tS Second(s) on the video
+    //  * @param tM Minute(s) on the video
+    //  * @param tH Hour(s) on the video
+    //  * @return Time with correct formatting
+    //  */
+    // private String formatTime(double tS, int tM, int tH) {
+    //     String ret = "";
+    //     if (tH < 10) {
+    //         ret += "0";
+    //     }
+    //     ret += tH + ":";
 
-        if (tM < 10) {
-            ret += "0";
-        }
-        ret += tM + ":";
+    //     if (tM < 10) {
+    //         ret += "0";
+    //     }
+    //     ret += tM + ":";
 
-        if (tS < 10) {
-            ret += "0";
-        }
-        ret += (int) tS;
+    //     if (tS < 10) {
+    //         ret += "0";
+    //     }
+    //     ret += (int) tS;
 
-        return ret;
-    }
+    //     return ret;
+    // }
 
     /**
      * Toggles the video pause/play feature
@@ -162,8 +209,13 @@ public class PrimaryController {
             mediaplayer.pause();
             isPlayed = false;
         }
-
-        videoTime();
+    }
+    /**
+     *  If slider is clicked move to that point in the video 
+     */
+    @FXML
+    public void slidePress() {
+        mediaplayer.seek(Duration.seconds(slider.getValue()));
     }
 
     /**

@@ -15,8 +15,8 @@
       <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#buttonPlay" />
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
-            <Slider prefHeight="14.0" prefWidth="415.0" />
+            <Label fx:id="videoTimeNeg" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
+            <Slider fx:id="slider" onMousePressed="#slidePress" prefHeight="14.0" prefWidth="619.0" />
             <Label fx:id="videoTime" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
          </children>
       </HBox>
