@@ -49,11 +49,6 @@ public class SecondaryController {
     }
 
     @FXML
-    private void openRecentFile() throws IOException {
-        
-    }
-
-    @FXML
     public void initialize() {
         //show recently opened files
         int s = previousVideos.size();
