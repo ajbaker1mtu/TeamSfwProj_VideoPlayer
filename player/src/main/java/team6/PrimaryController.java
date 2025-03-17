@@ -112,6 +112,8 @@ public class PrimaryController {
         // Seek when user releases the slider
         slider.setOnMouseReleased(event -> {
             mediaplayer.seek(Duration.seconds(slider.getValue()));
+            mediaplayer.play();
+            isPlayed = true;
         });
     }
 
@@ -128,68 +130,9 @@ public class PrimaryController {
         String formattedTime = minutes + ":" + String.format("%02d", seconds);
         video.setText(formattedTime);
 
+
     }
-    /**
-     * This function sets the text of the total time label to the total time of the
-     * video playing
-     */
-    // @FXML
-    // public void videoTime() {
-    //     // Total seconds of the video stored
-    //     double totalSeconds = Math.floor(currentMedia.getDuration().toSeconds());
-    //     int totalMinutes = 0, totalHours = 0;
-
-    //     // Checks if seconds are 60 or above
-    //     if (totalSeconds >= 60) {
-    //         // Convert to minutes and seconds
-    //         totalMinutes = (int) Math.floor(totalSeconds / 60);
-    //         totalSeconds = totalSeconds % 60;
-    //     }
-
-    //     // Checks if minutes are 60 or above
-    //     if (totalMinutes >= 60) {
-    //         // Convert to hours and minutes
-    //         totalHours = (int) Math.floor(totalMinutes / 60);
-    //         totalMinutes = totalMinutes % 60;
-    //     }
-
-    //     // Time that will be formatted correctly
-    //     String time = formatTime(totalSeconds, totalMinutes, totalHours);
-
-    //     // Sets time in label
-    //     videoTime.setText(time);
-
-    // }
-
-    // /**
-    //  * This function takes in the seconds, minutes, and hours of a video and outputs
-    //  * the correct formatting of it
-    //  * 
-    //  * @param tS Second(s) on the video
-    //  * @param tM Minute(s) on the video
-    //  * @param tH Hour(s) on the video
-    //  * @return Time with correct formatting
-    //  */
-    // private String formatTime(double tS, int tM, int tH) {
-    //     String ret = "";
-    //     if (tH < 10) {
-    //         ret += "0";
-    //     }
-    //     ret += tH + ":";
-
-    //     if (tM < 10) {
-    //         ret += "0";
-    //     }
-    //     ret += tM + ":";
-
-    //     if (tS < 10) {
-    //         ret += "0";
-    //     }
-    //     ret += (int) tS;
-
-    //     return ret;
-    // }
-
+   
     /**
      * Toggles the video pause/play feature
      * 
@@ -216,6 +159,8 @@ public class PrimaryController {
     @FXML
     public void slidePress() {
         mediaplayer.seek(Duration.seconds(slider.getValue()));
+        mediaplayer.pause();
+        isPlayed = false;
     }
 
     /**
