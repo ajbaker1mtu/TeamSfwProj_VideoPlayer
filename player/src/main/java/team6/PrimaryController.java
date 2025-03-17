@@ -14,7 +14,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
-
 public class PrimaryController {
 
     // The pause/play button
@@ -39,7 +38,7 @@ public class PrimaryController {
     // Total seconds of the video
     @FXML
     private Label videoTime;
-    @FXML 
+    @FXML
     private Label videoTimeNeg;
 
     // Skipping buttons
@@ -49,19 +48,29 @@ public class PrimaryController {
     @FXML
     private Button backward10;
 
+    /**
+     * Switches view to the select video file page
+     * 
+     * @throws IOException
+     */
     @FXML
     private void switchToSecondary() throws IOException {
         // Moves root to the secondary view
         VideoPlayer.setRoot("secondary");
 
-        // Stops video 
+        // Stops video
         isPlayed = false;
-        if (current_path != null){
+        if (current_path != null) {
             mediaplayer.stop();
         }
-        
+
     }
 
+    /**
+     * Creates the video player page
+     * 
+     * @throws IOException
+     */
     @FXML
     public void initialize() throws IOException {
         // This if statement lets us switch views without selecting a file.
@@ -89,9 +98,9 @@ public class PrimaryController {
         // Preserves the ratio of the video
         mediaview.setPreserveRatio(true);
 
-        // Creates a listener to check if the slider has been moved and updates it 
-        mediaplayer.currentTimeProperty().addListener(((obvValue, oldVal, newVal) ->{
-            if(!slider.isValueChanging()){
+        // Creates a listener to check if the slider has been moved and updates it
+        mediaplayer.currentTimeProperty().addListener(((obvValue, oldVal, newVal) -> {
+            if (!slider.isValueChanging()) {
                 slider.setValue(newVal.toSeconds());
                 vidTime(slider.getValue(), videoTimeNeg);
             }
@@ -116,27 +125,27 @@ public class PrimaryController {
             isPlayed = true;
         });
 
-        if(videoTimeNeg.getText() == "00:00:00") {
+        if (videoTimeNeg.getText() == "00:00:00") {
             VideoPlayer.setRoot("primary");
         }
     }
 
     /**
      * Formats and updates the time labels
+     * 
      * @param value The time value in seconds
      * @param video the label to update
      */
     @FXML
-    public void vidTime(double value, Label video){
+    public void vidTime(double value, Label video) {
         int timeDouble = (int) value;
         int minutes = timeDouble / 60;
         int seconds = timeDouble % 60;
         String formattedTime = minutes + ":" + String.format("%02d", seconds);
         video.setText(formattedTime);
 
-
     }
-   
+
     /**
      * Toggles the video pause/play feature
      * 
@@ -157,8 +166,9 @@ public class PrimaryController {
             isPlayed = false;
         }
     }
+
     /**
-     *  If slider is clicked move to that point in the video 
+     * If slider is clicked move to that point in the video
      */
     @FXML
     public void slidePress() {
