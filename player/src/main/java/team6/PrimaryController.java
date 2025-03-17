@@ -30,6 +30,7 @@ public class PrimaryController {
     private Media currentMedia;
     private static String current_path = null;
     private boolean isPlayed = false;
+    private boolean sliderPause = isPlayed;
 
     // The media viewer
     @FXML
@@ -120,9 +121,15 @@ public class PrimaryController {
 
         // Seek when user releases the slider
         slider.setOnMouseReleased(event -> {
+
+            // Makes video go to where the slider has ended from a drag
             mediaplayer.seek(Duration.seconds(slider.getValue()));
-            mediaplayer.play();
-            isPlayed = true;
+
+            // The sliderPause boolean remembers video state before the silder moved
+            isPlayed = !sliderPause;
+
+            // Resumes the original state of the video at a new time
+            buttonPlay();
         });
 
         if (videoTimeNeg.getText() == "00:00:00") {
@@ -149,6 +156,7 @@ public class PrimaryController {
     /**
      * Toggles the video pause/play feature
      * 
+     * @param isPlayed true = playing, false = paused
      * @param event
      */
     @FXML
@@ -173,8 +181,10 @@ public class PrimaryController {
     @FXML
     public void slidePress() {
         mediaplayer.seek(Duration.seconds(slider.getValue()));
-        mediaplayer.pause();
-        isPlayed = false;
+        sliderPause = isPlayed;
+
+        isPlayed = true;
+        buttonPlay();
     }
 
     /**
