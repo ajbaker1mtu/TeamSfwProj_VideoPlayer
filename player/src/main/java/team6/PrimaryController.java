@@ -132,6 +132,7 @@ public class PrimaryController {
             buttonPlay();
         });
 
+        // Tries to reload the video if it failed to
         if (videoTimeNeg.getText() == "00:00:00") {
             VideoPlayer.setRoot("primary");
         }
