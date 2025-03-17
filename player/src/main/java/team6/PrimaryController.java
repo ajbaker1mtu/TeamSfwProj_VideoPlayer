@@ -29,7 +29,7 @@ public class PrimaryController {
     private Slider slider;
 
     private Media currentMedia;
-    private static String current_path;
+    private static String current_path = null;
     private boolean isPlayed = false;
 
     // The media viewer
@@ -63,7 +63,7 @@ public class PrimaryController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         // This if statement lets us switch views without selecting a file.
         if (current_path == null || current_path.isEmpty()) {
             System.out.println("Error: No media file selected.");
@@ -113,6 +113,10 @@ public class PrimaryController {
         slider.setOnMouseReleased(event -> {
             mediaplayer.seek(Duration.seconds(slider.getValue()));
         });
+
+        if(videoTimeNeg.getText() == "00:00:00") {
+            VideoPlayer.setRoot("primary");
+        }
     }
 
     /**
@@ -225,5 +229,9 @@ public class PrimaryController {
      */
     public static void setPath(String path) {
         current_path = path;
+    }
+
+    public static String getPath() {
+        return current_path;
     }
 }
