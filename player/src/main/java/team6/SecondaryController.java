@@ -55,41 +55,41 @@ public class SecondaryController {
     public void initialize() {
         //show recently opened files
         int s = previousVideos.size();
-        if(RECENT_VIDEO_DISPLAY_SIZE < s) {
+        if(RECENT_VIDEO_DISPLAY_SIZE < s) { //get the minimum of RECENT_VIDEO_DISPLAY_SIZE and amount of recent files
             s = RECENT_VIDEO_DISPLAY_SIZE;
         }
         String[] displayList = new String[s];
         for(int i = 0; i < s; i++) {
-            if(!SHOW_FULL_PATH) {
+            if(!SHOW_FULL_PATH) { //to shorten file path to just file name
                 String ds = previousVideos.get(i);
-                for(int j = 0;j < ds.length(); j++) {
+                for(int j = 0;j < ds.length(); j++) { //loop through and get substring at '\'
                     if(ds.charAt(j) == '\\') {
                         ds = ds.substring(j+1, ds.length());
                     }
                 }
                 displayList[i] = ds;
-            }else {
+            }else { //show full file path
                 displayList[i] = previousVideos.get(i);
             }
         }
         videoDrop.getItems().addAll(displayList);
         videoDrop.setOnAction(event -> {
-            if(!SHOW_FULL_PATH) {
+            if(!SHOW_FULL_PATH) { //to shorten file path to just file name
                 for(int i = 0; i < videoDrop.getItems().size(); i++) {
                     if(!SHOW_FULL_PATH) {
                         String ds = previousVideos.get(i);
-                        for(int j = 0;j < ds.length(); j++) {
-                            if(ds.charAt(j) == '/') {
+                        for(int j = 0;j < ds.length(); j++) {//loop through and get substring at '\'
+                            if(ds.charAt(j) == '\\') {
                                 ds = ds.substring(j+1, ds.length());
                             }
                         }
-                        if(ds == videoDrop.getSelectionModel().getSelectedItem().toString()) {
+                        if(ds == videoDrop.getSelectionModel().getSelectedItem().toString()) { //get the path of the video
                             PrimaryController.setPath(previousVideos.get(i));
                             break;
                         }
                     }
                 }
-            }else {
+            }else { //show full file path
                     PrimaryController.setPath(videoDrop.getSelectionModel().getSelectedItem().toString());
             }
         });
