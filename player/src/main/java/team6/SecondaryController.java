@@ -16,6 +16,7 @@ public class SecondaryController {
     //list of allowed extensions, to edit the list of extensions: Ex: {"*.mp4"} -> {"*.mp4", "*.mkv"}
     private static final ExtensionFilter ALLOWED_EXTENSIONS = new ExtensionFilter("Video Files", new String[] {"*.mp4"});
     private static final String INITIAL_PATH = "C:\\"; //initial path for the file chooser
+    private static final boolean SHOW_FULL_PATH = true; //whether or not to show full path for open recent file
 
     FileChooser fc = new FileChooser();
 
@@ -59,11 +60,36 @@ public class SecondaryController {
         }
         String[] displayList = new String[s];
         for(int i = 0; i < s; i++) {
-            displayList[i] = previousVideos.get(i);
+            if(!SHOW_FULL_PATH) {
+                String ds = previousVideos.get(i);
+                for(int j = 0;j < ds.length(); j++) {
+                    if(ds.charAt(j) == '\\') {
+                        ds = ds.substring(j+1, ds.length());
+                    }
+                }
+                displayList[i] = ds;
+            }else {
+                displayList[i] = previousVideos.get(i);
+            }
         }
-        videoDrop.getItems().addAll(previousVideos);
+        videoDrop.getItems().addAll(displayList);
         videoDrop.setOnAction(event -> {
-            PrimaryController.setPath(videoDrop.getSelectionModel().getSelectedItem().toString());
+            for(int i = 0; i < videoDrop.getItems().size(); i++) {
+                if(!SHOW_FULL_PATH) {
+                    String ds = previousVideos.get(i);
+                    for(int j = 0;j < ds.length(); j++) {
+                        if(ds.charAt(j) == '/') {
+                            ds = ds.substring(j+1, ds.length());
+                        }
+                    }
+                    if(ds == videoDrop.getSelectionModel().getSelectedItem().toString()) {
+                        PrimaryController.setPath(previousVideos.get(i));
+                        break;
+                    }
+                }else {
+                    PrimaryController.setPath(videoDrop.getSelectionModel().getSelectedItem().toString());
+                }
+            }
         });
     }
 }
