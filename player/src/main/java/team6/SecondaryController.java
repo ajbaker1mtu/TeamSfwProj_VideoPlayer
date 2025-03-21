@@ -74,21 +74,23 @@ public class SecondaryController {
         }
         videoDrop.getItems().addAll(displayList);
         videoDrop.setOnAction(event -> {
-            for(int i = 0; i < videoDrop.getItems().size(); i++) {
-                if(!SHOW_FULL_PATH) {
-                    String ds = previousVideos.get(i);
-                    for(int j = 0;j < ds.length(); j++) {
-                        if(ds.charAt(j) == '/') {
-                            ds = ds.substring(j+1, ds.length());
+            if(!SHOW_FULL_PATH) {
+                for(int i = 0; i < videoDrop.getItems().size(); i++) {
+                    if(!SHOW_FULL_PATH) {
+                        String ds = previousVideos.get(i);
+                        for(int j = 0;j < ds.length(); j++) {
+                            if(ds.charAt(j) == '/') {
+                                ds = ds.substring(j+1, ds.length());
+                            }
+                        }
+                        if(ds == videoDrop.getSelectionModel().getSelectedItem().toString()) {
+                            PrimaryController.setPath(previousVideos.get(i));
+                            break;
                         }
                     }
-                    if(ds == videoDrop.getSelectionModel().getSelectedItem().toString()) {
-                        PrimaryController.setPath(previousVideos.get(i));
-                        break;
-                    }
-                }else {
-                    PrimaryController.setPath(videoDrop.getSelectionModel().getSelectedItem().toString());
                 }
+            }else {
+                    PrimaryController.setPath(videoDrop.getSelectionModel().getSelectedItem().toString());
             }
         });
     }
