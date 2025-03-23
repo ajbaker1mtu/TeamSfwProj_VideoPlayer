@@ -31,9 +31,9 @@
                <center>
                   <HBox alignment="CENTER" prefHeight="125.0" prefWidth="760.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="forward10" mnemonicParsing="false" text="10 -&gt;" />
-                        <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
                         <Button fx:id="backward10" mnemonicParsing="false" text="&lt;- 10" />
+                        <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
+                        <Button fx:id="forward10" mnemonicParsing="false" text="10 -&gt;" />
                      </children>
                   </HBox>
                </center>
