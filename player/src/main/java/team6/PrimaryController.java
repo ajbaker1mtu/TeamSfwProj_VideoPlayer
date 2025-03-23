@@ -180,9 +180,14 @@ public class PrimaryController {
      */
     @FXML
     public void slidePress() {
+
+        // Finds slider value after slider has been moved
         mediaplayer.seek(Duration.seconds(slider.getValue()));
+
+        // sliderPause saves the state of the video before the slider is used
         sliderPause = isPlayed;
 
+        // Pause video
         isPlayed = true;
         buttonPlay();
     }
