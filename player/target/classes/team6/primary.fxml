@@ -2,33 +2,82 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 
-<VBox alignment="CENTER" prefHeight="589.0" prefWidth="793.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
    <children>
-      <Label style="-fx-text-fill: #ffffff;" text="Primary View" />
-      <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Switch to Secondary View" />
-      <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" />
+      <Label style="-fx-text-fill: #ffffff;" text="Video Player" />
+      <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Select Video File" />
+      <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#buttonPlay" />
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
-            <Slider prefHeight="14.0" prefWidth="415.0" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="-00:00:00" />
+            <Label fx:id="videoTimeNeg" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
+            <Slider fx:id="slider" onMousePressed="#slidePress" prefHeight="14.0" prefWidth="619.0" />
+            <Label fx:id="videoTime" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
          </children>
       </HBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox prefHeight="37.0" prefWidth="760.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="636.0" spacing="10.0">
-               <children>
-                  <Button mnemonicParsing="false" text="&lt;- 10" />
-                  <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
-                  <Button mnemonicParsing="false" text="10 -&gt;" />
-               </children>
-            </HBox>
+            <BorderPane prefHeight="33.0" prefWidth="760.0">
+               <center>
+                  <HBox alignment="CENTER" prefHeight="125.0" prefWidth="760.0" spacing="10.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="forward10" mnemonicParsing="false" text="10 -&gt;" />
+                        <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
+                        <Button fx:id="backward10" mnemonicParsing="false" text="&lt;- 10" />
+                     </children>
+                  </HBox>
+               </center>
+               <left>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <MenuButton mnemonicParsing="false" popupSide="TOP" text="Settings">
+                          <items>
+                              <Menu mnemonicParsing="false" text="Speed">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="0.25" />
+                                    <MenuItem mnemonicParsing="false" text="0.5" />
+                                    <MenuItem mnemonicParsing="false" text="0.75" />
+                                    <MenuItem mnemonicParsing="false" text="Normal" />
+                                    <MenuItem mnemonicParsing="false" text="1.25" />
+                                    <MenuItem mnemonicParsing="false" text="1.5" />
+                                    <MenuItem mnemonicParsing="false" text="1.75" />
+                                    <MenuItem mnemonicParsing="false" text="2" />
+                                </items>
+                              </Menu>
+                              <Menu mnemonicParsing="false" text="Volume">
+                                <items>
+                                    <MenuItem mnemonicParsing="false">
+                                       <graphic>
+                                          <Slider nodeOrientation="RIGHT_TO_LEFT" />
+                                       </graphic>
+                                    </MenuItem>
+                                  <MenuItem mnemonicParsing="false" text="Mute" />
+                                </items>
+                              </Menu>
+                              <CheckMenuItem mnemonicParsing="false" text="Loop" />
+                          </items>
+                        </MenuButton>
+                     </children>
+                  </HBox>
+               </left>
+               <right>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" text="Fullscreen" />
+                     </children>
+                  </HBox>
+               </right>
+            </BorderPane>
          </children>
       </VBox>
    </children>

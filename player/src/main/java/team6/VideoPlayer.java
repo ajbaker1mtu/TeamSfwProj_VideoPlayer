@@ -11,13 +11,17 @@ import javafx.stage.Stage;
 /**
  * JavaFX App
  */
+
 public class VideoPlayer extends Application {
 
     private static Scene scene;
 
+    private static final int INITWIDTH = 1000;
+    private static final int INITHEIGHT = 800;
+
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("secondary"), 640, 480);
+        scene = new Scene(loadFXML("secondary"), INITWIDTH, INITHEIGHT);
         stage.setScene(scene);
         stage.show();
     }
@@ -31,7 +35,7 @@ public class VideoPlayer extends Application {
         return fxmlLoader.load();
     }
 
-    //used for file opener
+    // used for file opener
     public static Scene getScene() {
         return scene;
     }
