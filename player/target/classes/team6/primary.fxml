@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -9,17 +11,22 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
    <children>
       <Label style="-fx-text-fill: #ffffff;" text="Video Player" />
-      <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Select Video File" />
+      <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Select Video File">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
       <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#buttonPlay" />
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
@@ -34,9 +41,18 @@
                <center>
                   <HBox alignment="CENTER" prefHeight="125.0" prefWidth="760.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="backward10" mnemonicParsing="false" text="&lt;- 10" />
-                        <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play" />
-                        <Button fx:id="forward10" mnemonicParsing="false" text="10 -&gt;" />
+                        <Button fx:id="backward10" mnemonicParsing="false" text="&lt;- 10">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
+                        <Button fx:id="forward10" mnemonicParsing="false" text="10 -&gt;">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                      </children>
                   </HBox>
                </center>
@@ -65,19 +81,41 @@
                                 <items>
                                     <MenuItem mnemonicParsing="false">
                                        <graphic>
-                                          <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
-                                            <items>
-                                                <Slider />
-                                                <Button mnemonicParsing="false" text="Button" />
-                                            </items>
-                                          </SplitPane>
+                                          <VBox prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <Slider value="100.0" />
+                                                <CheckBox fx:id="muteCheckBox" mnemonicParsing="false" onMouseClicked="#mute" text="Mute">
+                                                   <textFill>
+                                                      <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="1.0">
+                                                         <stops>
+                                                            <Stop>
+                                                               <color>
+                                                                  <Color />
+                                                               </color>
+                                                            </Stop>
+                                                            <Stop offset="1.0">
+                                                               <color>
+                                                                  <Color red="1.0" green="1.0" blue="1.0" />
+                                                               </color>
+                                                            </Stop>
+                                                         </stops>
+                                                      </LinearGradient>
+                                                   </textFill>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </CheckBox>
+                                             </children>
+                                          </VBox>
                                        </graphic>
                                     </MenuItem>
-                                  <MenuItem mnemonicParsing="false" text="Mute" />
                                 </items>
                               </Menu>
                               <CheckMenuItem mnemonicParsing="false" text="Loop" />
                           </items>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </MenuButton>
                      </children>
                   </HBox>
@@ -85,7 +123,10 @@
                <right>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" text="Fullscreen" />
+                        <Button mnemonicParsing="false" text="Fullscreen">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                      </children>
                   </HBox>
                </right>

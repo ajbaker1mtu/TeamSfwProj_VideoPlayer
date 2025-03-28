@@ -6,6 +6,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
@@ -48,6 +49,9 @@ public class PrimaryController {
     @FXML
     private Button backward10;
 
+    @FXML
+    private CheckBox muteCheckBox;
+
     /**
      * Switches view to the select video file page
      * 
@@ -78,6 +82,8 @@ public class PrimaryController {
             System.out.println("Error: No media file selected.");
             return;
         }
+
+        muteCheckBox.setText("Mute");
 
         // Gets video file
         currentMedia = new Media(new File(current_path).toURI().toASCIIString());
@@ -135,7 +141,6 @@ public class PrimaryController {
         if (videoTimeNeg.getText() == "00:00:00") {
             VideoPlayer.setRoot("primary");
         }
-
     }
 
     /**
@@ -194,6 +199,14 @@ public class PrimaryController {
     }
 
     /**
+     * Mutes the player volume
+     */
+    @FXML
+    public void mute() {
+        mediaplayer.setMute(!mediaplayer.isMute());
+    }
+
+    /**
      * Sets path of selected file to current path of the player
      * 
      * @param path Path that current_path will be set to
@@ -202,6 +215,11 @@ public class PrimaryController {
         current_path = path;
     }
 
+    /**
+     * Retrives file path
+     * 
+     * @return Current file path
+     */
     public static String getPath() {
         return current_path;
     }
