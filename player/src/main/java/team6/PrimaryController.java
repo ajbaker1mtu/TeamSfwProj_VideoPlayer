@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
@@ -51,6 +52,10 @@ public class PrimaryController {
 
     @FXML
     private CheckBox muteCheckBox;
+
+    @FXML
+    private CheckMenuItem loopCheckMenuItem;
+    private boolean loop = false;
 
     /**
      * Switches view to the select video file page
@@ -138,6 +143,10 @@ public class PrimaryController {
         // Needed mouse pressed since on click didn't work
         muteCheckBox.setOnMousePressed(event -> {
             mute();
+        });
+
+        loopCheckMenuItem.setOnMenuValidation(event -> {
+            loop = !loop;
         });
 
         // Tries to reload the video if it failed to
