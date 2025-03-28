@@ -83,8 +83,6 @@ public class PrimaryController {
             return;
         }
 
-        muteCheckBox.setText("Mute");
-
         // Gets video file
         currentMedia = new Media(new File(current_path).toURI().toASCIIString());
         mediaplayer = new MediaPlayer(currentMedia);
@@ -135,6 +133,11 @@ public class PrimaryController {
 
             // Resumes the original state of the video at a new time
             buttonPlay();
+        });
+
+        // Needed mouse pressed since on click didn't work
+        muteCheckBox.setOnMousePressed(event -> {
+            mute();
         });
 
         // Tries to reload the video if it failed to

@@ -31,7 +31,7 @@
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
             <Label fx:id="videoTimeNeg" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
-            <Slider fx:id="slider" onMousePressed="#slidePress" prefHeight="14.0" prefWidth="619.0" />
+            <Slider fx:id="slider" cache="true" onMousePressed="#slidePress" prefHeight="14.0" prefWidth="619.0" />
             <Label fx:id="videoTime" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
          </children>
       </HBox>
@@ -81,10 +81,10 @@
                                 <items>
                                     <MenuItem mnemonicParsing="false">
                                        <graphic>
-                                          <VBox prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: white;">
+                                          <VBox prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: white;">
                                              <children>
-                                                <Slider value="100.0" />
-                                                <CheckBox fx:id="muteCheckBox" mnemonicParsing="false" onMouseClicked="#mute" text="Mute">
+                                                <Slider maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="150.0" value="100.0" />
+                                                <CheckBox fx:id="muteCheckBox" mnemonicParsing="false" text="Mute">
                                                    <textFill>
                                                       <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="1.0">
                                                          <stops>
