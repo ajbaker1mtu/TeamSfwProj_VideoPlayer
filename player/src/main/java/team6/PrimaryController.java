@@ -135,6 +135,7 @@ public class PrimaryController {
         if (videoTimeNeg.getText() == "00:00:00") {
             VideoPlayer.setRoot("primary");
         }
+
     }
 
     /**
