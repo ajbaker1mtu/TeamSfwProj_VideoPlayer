@@ -7,7 +7,10 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -44,21 +47,30 @@
                           <items>
                               <Menu mnemonicParsing="false" text="Speed">
                                 <items>
-                                  <MenuItem mnemonicParsing="false" text="0.25" />
-                                    <MenuItem mnemonicParsing="false" text="0.5" />
-                                    <MenuItem mnemonicParsing="false" text="0.75" />
-                                    <MenuItem mnemonicParsing="false" text="Normal" />
-                                    <MenuItem mnemonicParsing="false" text="1.25" />
-                                    <MenuItem mnemonicParsing="false" text="1.5" />
-                                    <MenuItem mnemonicParsing="false" text="1.75" />
-                                    <MenuItem mnemonicParsing="false" text="2" />
+                                    <RadioMenuItem mnemonicParsing="false" text="0.25">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="speed" />
+                                       </toggleGroup>
+                                    </RadioMenuItem>
+                                    <RadioMenuItem mnemonicParsing="false" text="0.5" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" text="0.75" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" selected="true" text="Normal" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" text="1.25" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" text="1.5" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" text="1.75" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" text="2" toggleGroup="$speed" />
                                 </items>
                               </Menu>
                               <Menu mnemonicParsing="false" text="Volume">
                                 <items>
                                     <MenuItem mnemonicParsing="false">
                                        <graphic>
-                                          <Slider nodeOrientation="RIGHT_TO_LEFT" />
+                                          <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                                            <items>
+                                                <Slider />
+                                                <Button mnemonicParsing="false" text="Button" />
+                                            </items>
+                                          </SplitPane>
                                        </graphic>
                                     </MenuItem>
                                   <MenuItem mnemonicParsing="false" text="Mute" />
