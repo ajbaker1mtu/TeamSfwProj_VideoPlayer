@@ -3,6 +3,7 @@ module team6 {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.media;
+    requires org.json;
 
     opens team6 to javafx.fxml;
 
