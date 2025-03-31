@@ -14,6 +14,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import javafx.scene.Cursor;
 
 public class PrimaryController {
 
@@ -127,8 +128,25 @@ public class PrimaryController {
             vidTime(newVal.doubleValue(), videoTimeNeg);
         });
 
+        slider.setOnMousePressed(event -> {
+
+            // Finds slider value after slider has been moved
+            mediaplayer.seek(Duration.seconds(slider.getValue()));
+
+            // sliderPause saves the state of the video before the slider is used
+            sliderPause = isPlayed;
+
+            // Pause video
+            isPlayed = true;
+            buttonPlay();
+
+            slider.setCursor(Cursor.CLOSED_HAND);
+        });
+
         // Seek when user releases the slider
         slider.setOnMouseReleased(event -> {
+
+            slider.setCursor(Cursor.OPEN_HAND);
 
             // Makes video go to where the slider has ended from a drag
             mediaplayer.seek(Duration.seconds(slider.getValue()));
@@ -193,23 +211,6 @@ public class PrimaryController {
             mediaplayer.pause();
             isPlayed = false;
         }
-    }
-
-    /**
-     * If slider is clicked move to that point in the video
-     */
-    @FXML
-    public void slidePress() {
-
-        // Finds slider value after slider has been moved
-        mediaplayer.seek(Duration.seconds(slider.getValue()));
-
-        // sliderPause saves the state of the video before the slider is used
-        sliderPause = isPlayed;
-
-        // Pause video
-        isPlayed = true;
-        buttonPlay();
     }
 
     /**

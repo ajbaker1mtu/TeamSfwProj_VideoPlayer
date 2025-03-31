@@ -12,6 +12,7 @@
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -22,7 +23,7 @@
 
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
    <children>
-      <Label style="-fx-text-fill: #ffffff;" text="Video Player" />
+      <Label style="-fx-text-fill: #ffffff;" text="Video Player" textFill="WHITE" />
       <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Select Video File">
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -30,11 +31,17 @@
       <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#buttonPlay">
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></MediaView>
+         </cursor>
+         <effect>
+            <DropShadow />
+         </effect></MediaView>
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
             <Label fx:id="videoTimeNeg" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
-            <Slider fx:id="slider" cache="true" onMousePressed="#slidePress" prefHeight="14.0" prefWidth="619.0" />
+            <Slider fx:id="slider" cache="true" prefHeight="14.0" prefWidth="619.0">
+               <cursor>
+                  <Cursor fx:constant="OPEN_HAND" />
+               </cursor></Slider>
             <Label fx:id="videoTime" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
          </children>
       </HBox>
