@@ -27,7 +27,10 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#buttonPlay" />
+      <MediaView fx:id="mediaview" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#buttonPlay">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></MediaView>
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
          <children>
             <Label fx:id="videoTimeNeg" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
