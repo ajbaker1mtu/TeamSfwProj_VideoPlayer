@@ -18,21 +18,23 @@ import javafx.scene.Cursor;
 
 public class PrimaryController {
 
-    // The pause/play button
-    @FXML
-    private Button buttonPlay;
+    // CONSTANTS
+    public static final int START = 0;
+    public static final int TIMECONVERTER = 60;
 
     // The media player
     @FXML
     MediaPlayer mediaplayer;
 
+    // Time slider and others
     @FXML
     private Slider slider;
+    private boolean isPlayed = false;
+    private boolean sliderPause = false;
 
+    // Media file
     private Media currentMedia;
     private static String current_path = null;
-    private boolean isPlayed = false;
-    private boolean sliderPause = isPlayed;
 
     // The media viewer
     @FXML
@@ -47,34 +49,23 @@ public class PrimaryController {
     // Skipping buttons
     @FXML
     private Button forward10;
-
     @FXML
     private Button backward10;
 
+    // The pause/play button
     @FXML
-    private CheckBox muteCheckBox;
+    private Button buttonPlay;
 
+    // Looping elements
     @FXML
     private CheckMenuItem loopCheckMenuItem;
     private boolean loop = false;
 
-    /**
-     * Switches view to the select video file page
-     * 
-     * @throws IOException
-     */
+    // Volume-modifying elements
     @FXML
-    private void switchToSecondary() throws IOException {
-        // Moves root to the secondary view
-        VideoPlayer.setRoot("secondary");
-
-        // Stops video
-        isPlayed = false;
-        if (current_path != null) {
-            mediaplayer.stop();
-        }
-
-    }
+    private Slider volume;
+    @FXML
+    private CheckBox muteCheckBox;
 
     /**
      * Creates the video player page
@@ -108,7 +99,32 @@ public class PrimaryController {
         // Preserves the ratio of the video
         mediaview.setPreserveRatio(true);
 
-        // Creates a listener to check if the slider has been moved and updates it
+        // All dynamic events
+        mediaplayerEvents();
+        sliderEvents();
+        volumeEvents();
+        loopEvents();
+
+        // Tries to reload the video if it failed to
+        if (videoTimeNeg.getText() == "00:00:00") {
+            VideoPlayer.setRoot("primary");
+        }
+    }
+
+    // -------------------------------EVENT FUNCTIONS-------------------------------
+
+    /**
+     * <p>
+     * These are all the mediaplayer events
+     * </p>
+     * <o1>
+     * <li>1. Listener</li>
+     * <li>2. On Ready</li>
+     * <li>3. On End</li>
+     * </o1>
+     */
+    private void mediaplayerEvents() {
+        // 1. Creates a listener to check if the slider has been moved and updates it
         mediaplayer.currentTimeProperty().addListener(((obvValue, oldVal, newVal) -> {
             if (!slider.isValueChanging()) {
                 slider.setValue(newVal.toSeconds());
@@ -116,64 +132,127 @@ public class PrimaryController {
             }
         }));
 
-        // When the media player is started run this function
+        // 2. When the media player is started run this function
         mediaplayer.setOnReady(() -> {
             Duration totalDuration = currentMedia.getDuration();
             slider.setMax(totalDuration.toSeconds());
             vidTime(currentMedia.getDuration().toSeconds(), videoTime);
         });
 
-        // Handle slider dragging (update video time)
+        // 3. Looping functionality
+        mediaplayer.setOnEndOfMedia(() -> {
+            if (loop) {
+                mediaplayer.seek(Duration.seconds(START));
+            }
+        });
+    }
+
+    /**
+     * <p>
+     * These are all the slider events
+     * </p>
+     * <o1>
+     * <li>1. Listener</li>
+     * <li>2. On Mouse Pressed</li>
+     * <li>3. On Mouse Dragged</li>
+     * <li>4. On Mouse Released</li>
+     * </o1>
+     */
+    private void sliderEvents() {
+        // 1. Handle slider dragging (update video time)
         slider.valueProperty().addListener((obs, oldVal, newVal) -> {
             vidTime(newVal.doubleValue(), videoTimeNeg);
         });
 
+        // 2. When the slider has been pressed
         slider.setOnMousePressed(event -> {
 
-            // Finds slider value after slider has been moved
+            // Grips onto slider
+            slider.setCursor(Cursor.CLOSED_HAND);
+
+            // Finds time after slider has been moved
             mediaplayer.seek(Duration.seconds(slider.getValue()));
 
-            // sliderPause saves the state of the video before the slider is used
+            // sliderPause saves the original state
             sliderPause = isPlayed;
 
             // Pause video
             isPlayed = true;
             buttonPlay();
-
-            slider.setCursor(Cursor.CLOSED_HAND);
         });
 
-        // Seek when user releases the slider
+        // 3. Changes the time to current slider position
+        slider.setOnMouseDragged(event -> {
+            mediaplayer.seek(Duration.seconds(slider.getValue()));
+        });
+
+        // 4. Seek when user releases the slider
         slider.setOnMouseReleased(event -> {
 
+            // Opens hand since slider has been released
             slider.setCursor(Cursor.OPEN_HAND);
 
-            // Makes video go to where the slider has ended from a drag
+            // Makes video go to new time
             mediaplayer.seek(Duration.seconds(slider.getValue()));
 
-            // The sliderPause boolean remembers video state before the silder moved
+            // State of the video is recovered
             isPlayed = !sliderPause;
 
             // Resumes the original state of the video at a new time
             buttonPlay();
         });
+    }
 
-        // Needed mouse pressed since on click didn't work
+    /**
+     * <p>
+     * These are all the volume-related events
+     * </p>
+     * <o1>
+     * <li>1. On Mouse Pressed (volume)</li>
+     * <li>2. On Mouse Dragged (volume)</li>
+     * <li>3. On Mouse Released (volume)</li>
+     * <li>4. On Mouse Pressed (muteCheckBox)</li>
+     * </o1>
+     */
+    private void volumeEvents() {
+        // 1.
+        volume.setOnMousePressed(event -> {
+            changeVolume();
+        });
+
+        // 2.
+        volume.setOnMouseDragged(event -> {
+            changeVolume();
+        });
+
+        // 3.
+        volume.setOnMouseReleased(event -> {
+            changeVolume();
+        });
+
+        // 4.
         muteCheckBox.setOnMousePressed(event -> {
             mute();
         });
-
-        /*
-         * loopCheckMenuItem.setOnMenuValidation(event -> {
-         * loop = !loop;
-         * });
-         */
-
-        // Tries to reload the video if it failed to
-        if (videoTimeNeg.getText() == "00:00:00") {
-            VideoPlayer.setRoot("primary");
-        }
     }
+
+    /**
+     * <p>
+     * These are all the loop events
+     * </p>
+     * <o1>
+     * <li>1. onSelected</li>
+     * </o1>
+     */
+    private void loopEvents() {
+
+        // 1.
+        loopCheckMenuItem.setOnAction(event -> {
+            loop = !loop;
+        });
+    }
+
+    // ------------------------------HELPER FUNCTIONS------------------------------
 
     /**
      * Formats and updates the time labels
@@ -184,8 +263,8 @@ public class PrimaryController {
     @FXML
     public void vidTime(double value, Label video) {
         int timeDouble = (int) value;
-        int minutes = timeDouble / 60;
-        int seconds = timeDouble % 60;
+        int minutes = timeDouble / TIMECONVERTER;
+        int seconds = timeDouble % TIMECONVERTER;
         String formattedTime = minutes + ":" + String.format("%02d", seconds);
         video.setText(formattedTime);
 
@@ -214,12 +293,40 @@ public class PrimaryController {
     }
 
     /**
+     * Changes the volume of the media player
+     */
+    private void changeVolume() {
+        // The slider interacts good when squared
+        mediaplayer.setVolume(volume.getValue());
+    }
+
+    /**
      * Mutes the player volume
      */
-    @FXML
-    public void mute() {
+    private void mute() {
         mediaplayer.setMute(!mediaplayer.isMute());
     }
+
+    // -------------------------------FXML FUNCTIONS-------------------------------
+
+    /**
+     * Switches view to the select video file page
+     * 
+     * @throws IOException
+     */
+    @FXML
+    private void switchToSecondary() throws IOException {
+        // Moves root to the secondary view
+        VideoPlayer.setRoot("secondary");
+
+        // Stops video
+        isPlayed = false;
+        if (current_path != null) {
+            mediaplayer.stop();
+        }
+    }
+
+    // -------------------------------PATH FUNCTIONS-------------------------------
 
     /**
      * Sets path of selected file to current path of the player

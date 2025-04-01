@@ -93,7 +93,7 @@
                                        <graphic>
                                           <VBox prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: white;">
                                              <children>
-                                                <Slider maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="150.0" value="100.0" />
+                                                <Slider fx:id="volume" blockIncrement="0.1" majorTickUnit="2.0" max="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="1" prefHeight="20.0" prefWidth="150.0" value="1.0" />
                                                 <CheckBox fx:id="muteCheckBox" mnemonicParsing="false" text="Mute">
                                                    <textFill>
                                                       <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="1.0">
@@ -121,7 +121,7 @@
                                     </MenuItem>
                                 </items>
                               </Menu>
-                              <CheckMenuItem mnemonicParsing="false" text="Loop" />
+                              <CheckMenuItem fx:id="loopCheckMenuItem" mnemonicParsing="false" text="Loop" />
                           </items>
                            <cursor>
                               <Cursor fx:constant="HAND" />
