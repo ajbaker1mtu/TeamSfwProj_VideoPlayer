@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,9 +15,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.util.Duration;
-import javafx.scene.Cursor;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class PrimaryController {
 
@@ -82,6 +82,7 @@ public class PrimaryController {
     // Time slider booleans
     private boolean isPlayed = false;
     private boolean sliderPause = false;
+    private boolean isFullscreen = false;
 
     // Current path
     private static String current_path = null;
