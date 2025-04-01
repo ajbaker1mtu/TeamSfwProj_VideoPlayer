@@ -138,13 +138,11 @@ public class PrimaryController {
         }
 
         /**
-         * 
          * Handles Fullscreen and hitting esc to exit it
          */
         Platform.runLater(() -> {
             Stage stage = (Stage) fullButton.getScene().getWindow();
            
-
             // Add event listener to detect fullscreen change
             stage.fullScreenProperty().addListener((obs, wasFullScreen, isNowFullScreen) -> {
                 if (!isNowFullScreen) {
@@ -265,28 +263,12 @@ public class PrimaryController {
 
         // 1.
         backward10.setOnMouseClicked(event -> {
-            // Case 1: normal
-            if (slider.getValue() >= SKIPSEC) {
-                // Goes back ten seconds
-                setTime(slider.getValue() - SKIPSEC);
-            } else /* Case 2: not normal */ {
-                // Goes back to start
-                setTime(START);
-            }
+            rewind(SKIPSEC);
         });
 
         // 2.
         forward10.setOnMouseClicked(event -> {
-            double endTime = getEndTime();
-
-            // Case 1: normal
-            if (slider.getValue() <= endTime - SKIPSEC) {
-                // Goes forward ten seconds
-                setTime(slider.getValue() + SKIPSEC);
-            } else /* Case 2: not normal */ {
-                // Goes to end
-                setTime(endTime);
-            }
+            fastForward(SKIPSEC);
         });
     }
 
@@ -420,30 +402,22 @@ public class PrimaryController {
             mediaview.setFitHeight(VideoPlayer.getScene().getHeight() - 200);
         }
     }
+
+    /**
+     * Detects a key pressed and then skips ahead based on the key
+     */
     @FXML
     private void arrowSkip(){
         Scene scene = slider.getScene();
+       
         scene.setOnKeyPressed(event ->{
+             // If A is pressed rewind 10 secs
             if(event.getCode() == KeyCode.A){
-                if (slider.getValue() >= SKIPSEC) {
-                    // Goes back ten seconds
-                    setTime(slider.getValue() - SKIPSEC);
-                } else /* Case 2: not normal */ {
-                    // Goes back to start
-                    setTime(START);
-                }
+                rewind(SKIPSEC);
             }
+             // If D is pressed fast forward 10 secs
             if(event.getCode() == KeyCode.D){
-                double endTime = getEndTime();
-
-                // Case 1: normal
-                if (slider.getValue() <= endTime - SKIPSEC) {
-                    // Goes forward ten seconds
-                    setTime(slider.getValue() + SKIPSEC);
-                } else /* Case 2: not normal */ {
-                    // Goes to end
-                    setTime(endTime);
-                }
+                fastForward(SKIPSEC);
             }
         });
     
@@ -488,6 +462,36 @@ public class PrimaryController {
 
         // Checks if video needs to loop
         checkLoop();
+    }
+
+    /**
+     * Helper function to assist in skipping backward a given amount of seconds 
+     * @param sec
+     */
+    public void rewind(int sec){
+        if (slider.getValue() >= sec) {
+            // Goes back ten seconds
+            setTime(slider.getValue() - sec);
+        } else /* Case 2: not normal */ {
+            // Goes back to start
+            setTime(START);
+        }
+    }
+
+     /**
+     * Helper function to assist in skipping forward a given amount of seconds 
+     * @param sec
+     */
+    public void fastForward(int sec){
+        double endTime = getEndTime();
+            // Case 1: normal
+        if (slider.getValue() <= endTime - sec) {
+            // Goes forward ten seconds
+            setTime(slider.getValue() + sec);
+        } else /* Case 2: not normal */ {
+            // Goes to end
+            setTime(endTime);
+        }
     }
 
     // -------------------------------PATH FUNCTIONS-------------------------------
