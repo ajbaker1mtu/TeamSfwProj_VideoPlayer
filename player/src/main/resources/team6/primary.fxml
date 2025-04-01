@@ -34,35 +34,51 @@
          </cursor>
          <effect>
             <DropShadow />
-         </effect></MediaView>
-      <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
+         </effect>
+      </MediaView>
+      <VBox prefHeight="68.0" prefWidth="760.0">
          <children>
-            <Label fx:id="videoTimeNeg" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
-            <Slider fx:id="slider" cache="true" prefHeight="14.0" prefWidth="619.0">
-               <cursor>
-                  <Cursor fx:constant="OPEN_HAND" />
-               </cursor></Slider>
-            <Label fx:id="videoTime" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00" />
-         </children>
-      </HBox>
-      <VBox prefHeight="37.0" prefWidth="760.0">
-         <children>
+            <HBox alignment="CENTER" prefHeight="29.0" prefWidth="545.0" spacing="15.0">
+               <children>
+                  <Label fx:id="videoTimeNeg" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00">
+                     <padding>
+                        <Insets bottom="20.0" />
+                     </padding>
+                  </Label>
+                  <Slider fx:id="slider" cache="true" prefHeight="60.0" prefWidth="614.0">
+                     <cursor>
+                        <Cursor fx:constant="OPEN_HAND" />
+                     </cursor>
+                     <padding>
+                        <Insets bottom="20.0" />
+                     </padding>
+                  </Slider>
+                  <Label fx:id="videoTime" alignment="CENTER" prefHeight="17.0" prefWidth="60.0" style="-fx-text-fill: #ffffff;" text="00:00:00">
+                     <padding>
+                        <Insets bottom="20.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
             <BorderPane prefHeight="33.0" prefWidth="760.0">
                <center>
-                  <HBox alignment="CENTER" prefHeight="125.0" prefWidth="760.0" spacing="10.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" prefHeight="51.0" prefWidth="360.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
                         <Button fx:id="backward10" mnemonicParsing="false" text="&lt;- 10">
                            <cursor>
                               <Cursor fx:constant="HAND" />
-                           </cursor></Button>
+                           </cursor>
+                        </Button>
                         <Button fx:id="buttonPlay" mnemonicParsing="false" onMouseClicked="#buttonPlay" text="Play">
                            <cursor>
                               <Cursor fx:constant="HAND" />
-                           </cursor></Button>
+                           </cursor>
+                        </Button>
                         <Button fx:id="forward10" mnemonicParsing="false" text="10 -&gt;">
                            <cursor>
                               <Cursor fx:constant="HAND" />
-                           </cursor></Button>
+                           </cursor>
+                        </Button>
                      </children>
                   </HBox>
                </center>
@@ -133,10 +149,11 @@
                <right>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" text="Fullscreen">
+                        <Button fx:id="fullButton" mnemonicParsing="false" onAction="#toggleFullScreen" text="Fullscreen">
                            <cursor>
                               <Cursor fx:constant="HAND" />
-                           </cursor></Button>
+                           </cursor>
+                        </Button>
                      </children>
                   </HBox>
                </right>

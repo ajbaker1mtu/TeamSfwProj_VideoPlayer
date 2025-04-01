@@ -3,6 +3,7 @@ package team6;
 import java.io.File;
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +16,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import javafx.scene.Cursor;
+import javafx.stage.Stage;
 
 public class PrimaryController {
 
@@ -32,6 +34,7 @@ public class PrimaryController {
     private Slider slider;
     private boolean isPlayed = false;
     private boolean sliderPause = false;
+    private boolean isFullscreen = false;
 
     // Media file
     private Media currentMedia;
@@ -56,6 +59,9 @@ public class PrimaryController {
     // The pause/play button
     @FXML
     private Button buttonPlay;
+
+    @FXML
+    private Button fullButton;
 
     // Looping elements
     @FXML
@@ -111,6 +117,34 @@ public class PrimaryController {
         if (videoTimeNeg.getText() == "00:00:00") {
             VideoPlayer.setRoot("primary");
         }
+
+        /**
+         * 
+         * Handles Fullscreen and hitting esc to exit it
+         */
+        Platform.runLater(() -> {
+            Stage stage = (Stage) fullButton.getScene().getWindow();
+
+            // Add event listener to detect fullscreen change
+            stage.fullScreenProperty().addListener((obs, wasFullScreen, isNowFullScreen) -> {
+                if (!isNowFullScreen) {
+                    toggleFullScreen();
+                }
+            });
+            // Listen for ESC key press to exit fullscreen
+            stage.getScene().setOnKeyPressed(event -> {
+                switch (event.getCode()) {
+                    case ESCAPE:
+                        if (isFullscreen) {
+                            toggleFullScreen();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+
     }
 
     // -------------------------------EVENT FUNCTIONS-------------------------------
@@ -350,6 +384,24 @@ public class PrimaryController {
     private void setTime(double time) {
         slider.setValue(time);
         mediaplayer.seek(Duration.seconds(slider.getValue()));
+    }
+
+    @FXML
+    private void toggleFullScreen() {
+        Stage stage = (Stage) fullButton.getScene().getWindow();
+        isFullscreen = !isFullscreen;
+        stage.setFullScreen(isFullscreen);
+
+        if (isFullscreen) {
+            mediaview.fitWidthProperty().bind(stage.widthProperty());
+            mediaview.fitHeightProperty().bind(stage.heightProperty());
+
+        } else {
+            mediaview.fitWidthProperty().unbind();
+            mediaview.fitHeightProperty().unbind();
+            mediaview.setFitWidth(VideoPlayer.getScene().getWidth());
+            mediaview.setFitHeight(VideoPlayer.getScene().getHeight() - 200);
+        }
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------
