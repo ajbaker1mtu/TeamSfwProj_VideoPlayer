@@ -12,6 +12,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -129,6 +130,7 @@ public class PrimaryController {
         skipEvents();
         volumeEvents();
         loopEvents();
+       
 
         // Tries to reload the video if it failed to
         if (videoTimeNeg.getText() == "00:00:00") {
@@ -141,6 +143,7 @@ public class PrimaryController {
          */
         Platform.runLater(() -> {
             Stage stage = (Stage) fullButton.getScene().getWindow();
+           
 
             // Add event listener to detect fullscreen change
             stage.fullScreenProperty().addListener((obs, wasFullScreen, isNowFullScreen) -> {
@@ -150,14 +153,10 @@ public class PrimaryController {
             });
             // Listen for ESC key press to exit fullscreen
             stage.getScene().setOnKeyPressed(event -> {
-                switch (event.getCode()) {
-                    case ESCAPE:
-                        if (isFullscreen) {
-                            toggleFullScreen();
-                        }
-                        break;
-                    default:
-                        break;
+                if (event.getCode() == KeyCode.ESCAPE){
+                    if (isFullscreen) {
+                        toggleFullScreen();
+                    }
                 }
             });
         });
@@ -401,6 +400,9 @@ public class PrimaryController {
         mediaplayer.seek(Duration.seconds(slider.getValue()));
     }
 
+    /**
+     * Sets the window to fullscreen 
+     */
     @FXML
     private void toggleFullScreen() {
         Stage stage = (Stage) fullButton.getScene().getWindow();
@@ -417,6 +419,34 @@ public class PrimaryController {
             mediaview.setFitWidth(VideoPlayer.getScene().getWidth());
             mediaview.setFitHeight(VideoPlayer.getScene().getHeight() - 200);
         }
+    }
+    @FXML
+    private void arrowSkip(){
+        Scene scene = slider.getScene();
+        scene.setOnKeyPressed(event ->{
+            if(event.getCode() == KeyCode.A){
+                if (slider.getValue() >= SKIPSEC) {
+                    // Goes back ten seconds
+                    setTime(slider.getValue() - SKIPSEC);
+                } else /* Case 2: not normal */ {
+                    // Goes back to start
+                    setTime(START);
+                }
+            }
+            if(event.getCode() == KeyCode.D){
+                double endTime = getEndTime();
+
+                // Case 1: normal
+                if (slider.getValue() <= endTime - SKIPSEC) {
+                    // Goes forward ten seconds
+                    setTime(slider.getValue() + SKIPSEC);
+                } else /* Case 2: not normal */ {
+                    // Goes to end
+                    setTime(endTime);
+                }
+            }
+        });
+    
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------
