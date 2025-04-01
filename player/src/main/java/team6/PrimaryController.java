@@ -20,6 +20,7 @@ public class PrimaryController {
 
     // CONSTANTS
     public static final int START = 0;
+    public final int SKIPSEC = 10;
     public static final int TIMECONVERTER = 60;
 
     // The media player
@@ -102,6 +103,7 @@ public class PrimaryController {
         // All dynamic events
         mediaplayerEvents();
         sliderEvents();
+        skipEvents();
         volumeEvents();
         loopEvents();
 
@@ -141,9 +143,7 @@ public class PrimaryController {
 
         // 3. Looping functionality
         mediaplayer.setOnEndOfMedia(() -> {
-            if (loop) {
-                mediaplayer.seek(Duration.seconds(START));
-            }
+            checkLoop();
         });
     }
 
@@ -171,7 +171,7 @@ public class PrimaryController {
             slider.setCursor(Cursor.CLOSED_HAND);
 
             // Finds time after slider has been moved
-            mediaplayer.seek(Duration.seconds(slider.getValue()));
+            setTime(slider.getValue());
 
             // sliderPause saves the original state
             sliderPause = isPlayed;
@@ -183,7 +183,7 @@ public class PrimaryController {
 
         // 3. Changes the time to current slider position
         slider.setOnMouseDragged(event -> {
-            mediaplayer.seek(Duration.seconds(slider.getValue()));
+            setTime(slider.getValue());
         });
 
         // 4. Seek when user releases the slider
@@ -193,13 +193,51 @@ public class PrimaryController {
             slider.setCursor(Cursor.OPEN_HAND);
 
             // Makes video go to new time
-            mediaplayer.seek(Duration.seconds(slider.getValue()));
+            setTime(slider.getValue());
 
             // State of the video is recovered
             isPlayed = !sliderPause;
 
             // Resumes the original state of the video at a new time
             buttonPlay();
+        });
+    }
+
+    /**
+     * <p>
+     * These are all the skip events
+     * </p>
+     * <o1>
+     * <li>1. On Mouse Pressed (backward 10)</li>
+     * <li>2. On Mouse Pressed (forward 10)</li>
+     * </o1>
+     */
+    private void skipEvents() {
+
+        // 1.
+        backward10.setOnMouseClicked(event -> {
+            // Case 1: normal
+            if (slider.getValue() >= SKIPSEC) {
+                // Goes back ten seconds
+                setTime(slider.getValue() - SKIPSEC);
+            } else /* Case 2: not normal */ {
+                // Goes back to start
+                setTime(START);
+            }
+        });
+
+        // 2.
+        forward10.setOnMouseClicked(event -> {
+            double endTime = getEndTime();
+
+            // Case 1: normal
+            if (slider.getValue() <= endTime - SKIPSEC) {
+                // Goes forward ten seconds
+                setTime(slider.getValue() + SKIPSEC);
+            } else /* Case 2: not normal */ {
+                // Goes to end
+                setTime(endTime);
+            }
         });
     }
 
@@ -215,6 +253,7 @@ public class PrimaryController {
      * </o1>
      */
     private void volumeEvents() {
+        // 1-3 is all volume changes
         // 1.
         volume.setOnMousePressed(event -> {
             changeVolume();
@@ -230,7 +269,7 @@ public class PrimaryController {
             changeVolume();
         });
 
-        // 4.
+        // 4. Mute button
         muteCheckBox.setOnMousePressed(event -> {
             mute();
         });
@@ -249,7 +288,11 @@ public class PrimaryController {
         // 1.
         loopCheckMenuItem.setOnAction(event -> {
             loop = !loop;
+
+            // Checks if looping can occur
+            checkLoop();
         });
+
     }
 
     // ------------------------------HELPER FUNCTIONS------------------------------
@@ -268,6 +311,64 @@ public class PrimaryController {
         String formattedTime = minutes + ":" + String.format("%02d", seconds);
         video.setText(formattedTime);
 
+    }
+
+    /**
+     * Changes the volume of the media player
+     */
+    private void changeVolume() {
+        // The slider interacts good when squared
+        mediaplayer.setVolume(volume.getValue());
+    }
+
+    /**
+     * Mutes the player volume
+     */
+    private void mute() {
+        mediaplayer.setMute(!mediaplayer.isMute());
+    }
+
+    /**
+     * Gets end time of video
+     * 
+     * @return end time in seconds
+     */
+    private double getEndTime() {
+        return currentMedia.getDuration().toSeconds();
+    }
+
+    /**
+     * Checks if the video should loop or not
+     */
+    private void checkLoop() {
+        // Is loop selected and is the video at the end?
+        if (loop && mediaplayer.getCurrentTime().toSeconds() == getEndTime()) {
+            setTime(START);
+        }
+    }
+
+    private void setTime(double time) {
+        slider.setValue(time);
+        mediaplayer.seek(Duration.seconds(slider.getValue()));
+    }
+
+    // -------------------------------FXML FUNCTIONS-------------------------------
+
+    /**
+     * Switches view to the select video file page
+     * 
+     * @throws IOException
+     */
+    @FXML
+    private void switchToSecondary() throws IOException {
+        // Moves root to the secondary view
+        VideoPlayer.setRoot("secondary");
+
+        // Stops video
+        isPlayed = false;
+        if (current_path != null) {
+            mediaplayer.stop();
+        }
     }
 
     /**
@@ -290,40 +391,7 @@ public class PrimaryController {
             mediaplayer.pause();
             isPlayed = false;
         }
-    }
-
-    /**
-     * Changes the volume of the media player
-     */
-    private void changeVolume() {
-        // The slider interacts good when squared
-        mediaplayer.setVolume(volume.getValue());
-    }
-
-    /**
-     * Mutes the player volume
-     */
-    private void mute() {
-        mediaplayer.setMute(!mediaplayer.isMute());
-    }
-
-    // -------------------------------FXML FUNCTIONS-------------------------------
-
-    /**
-     * Switches view to the select video file page
-     * 
-     * @throws IOException
-     */
-    @FXML
-    private void switchToSecondary() throws IOException {
-        // Moves root to the secondary view
-        VideoPlayer.setRoot("secondary");
-
-        // Stops video
-        isPlayed = false;
-        if (current_path != null) {
-            mediaplayer.stop();
-        }
+        checkLoop();
     }
 
     // -------------------------------PATH FUNCTIONS-------------------------------
