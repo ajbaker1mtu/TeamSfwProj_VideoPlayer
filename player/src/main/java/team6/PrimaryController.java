@@ -18,28 +18,34 @@ import javafx.scene.Cursor;
 
 public class PrimaryController {
 
-    // CONSTANTS
-    public static final int START = 0;
-    public final int SKIPSEC = 10;
-    public static final int TIMECONVERTER = 60;
+    // ----------------------------------CONSTANTS----------------------------------
+    // Start time
+    private static final int START = 0;
 
+    // Skip time
+    private final int SKIPSEC = 10;
+
+    // Converter for seconds -> minutes -> hours and back
+    private static final int TIMECONVERTER = 60;
+
+    // Space for the margins (top and bottom)
+    private static final int MARGIN = 200;
+
+    // --------------------------------FXML ELEMENTS--------------------------------
     // The media player
     @FXML
-    MediaPlayer mediaplayer;
+    private MediaPlayer mediaplayer;
 
     // Time slider and others
     @FXML
     private Slider slider;
-    private boolean isPlayed = false;
-    private boolean sliderPause = false;
 
     // Media file
     private Media currentMedia;
-    private static String current_path = null;
 
     // The media viewer
     @FXML
-    MediaView mediaview;
+    private MediaView mediaview;
 
     // Total seconds of the video
     @FXML
@@ -60,7 +66,6 @@ public class PrimaryController {
     // Looping elements
     @FXML
     private CheckMenuItem loopCheckMenuItem;
-    private boolean loop = false;
 
     // Volume-modifying elements
     @FXML
@@ -68,6 +73,18 @@ public class PrimaryController {
     @FXML
     private CheckBox muteCheckBox;
 
+    // ------------------------------HELPER VARIABLES-------------------------------
+    // Time slider booleans
+    private boolean isPlayed = false;
+    private boolean sliderPause = false;
+
+    // Current path
+    private static String current_path = null;
+
+    // Loop on/off boolean
+    private boolean loop = false;
+
+    // ------------------------------INITIALIZE WINDOW------------------------------
     /**
      * Creates the video player page
      * 
@@ -95,7 +112,7 @@ public class PrimaryController {
         // mediaview.fitHeightProperty().bind(size.heightProperty());
 
         // mediaview.setFitWidth(1920);
-        mediaview.setFitHeight(VideoPlayer.getScene().getHeight() - 200);
+        mediaview.setFitHeight(VideoPlayer.getScene().getHeight() - MARGIN);
 
         // Preserves the ratio of the video
         mediaview.setPreserveRatio(true);
@@ -114,7 +131,6 @@ public class PrimaryController {
     }
 
     // -------------------------------EVENT FUNCTIONS-------------------------------
-
     /**
      * <p>
      * These are all the mediaplayer events
@@ -208,8 +224,8 @@ public class PrimaryController {
      * These are all the skip events
      * </p>
      * <o1>
-     * <li>1. On Mouse Pressed (backward 10)</li>
-     * <li>2. On Mouse Pressed (forward 10)</li>
+     * <li>1. On Mouse Clicked (backward 10)</li>
+     * <li>2. On Mouse Clicked (forward 10)</li>
      * </o1>
      */
     private void skipEvents() {
@@ -249,7 +265,7 @@ public class PrimaryController {
      * <li>1. On Mouse Pressed (volume)</li>
      * <li>2. On Mouse Dragged (volume)</li>
      * <li>3. On Mouse Released (volume)</li>
-     * <li>4. On Mouse Pressed (muteCheckBox)</li>
+     * <li>4. On Mouse Clicked (muteCheckBox)</li>
      * </o1>
      */
     private void volumeEvents() {
@@ -270,7 +286,7 @@ public class PrimaryController {
         });
 
         // 4. Mute button
-        muteCheckBox.setOnMousePressed(event -> {
+        muteCheckBox.setOnMouseClicked(event -> {
             mute();
         });
     }
@@ -296,7 +312,6 @@ public class PrimaryController {
     }
 
     // ------------------------------HELPER FUNCTIONS------------------------------
-
     /**
      * Formats and updates the time labels
      * 
@@ -353,7 +368,6 @@ public class PrimaryController {
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------
-
     /**
      * Switches view to the select video file page
      * 
@@ -384,18 +398,17 @@ public class PrimaryController {
             buttonPlay.setText("Pause");
             mediaplayer.play();
             isPlayed = true;
-
-            // Pauses video
-        } else {
+        } else /* Pauses video */ {
             buttonPlay.setText("Play");
             mediaplayer.pause();
             isPlayed = false;
         }
+
+        // Checks if video needs to loop
         checkLoop();
     }
 
     // -------------------------------PATH FUNCTIONS-------------------------------
-
     /**
      * Sets path of selected file to current path of the player
      * 
