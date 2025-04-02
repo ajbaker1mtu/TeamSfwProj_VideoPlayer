@@ -66,6 +66,7 @@ public class PrimaryController {
     @FXML
     private Button buttonPlay;
 
+    // Fullscreen Button 
     @FXML
     private Button fullButton;
 
@@ -94,7 +95,7 @@ public class PrimaryController {
     // ------------------------------INITIALIZE WINDOW------------------------------
     /**
      * Creates the video player page
-     * 
+     *
      * @throws IOException
      */
     @FXML
@@ -130,7 +131,6 @@ public class PrimaryController {
         skipEvents();
         volumeEvents();
         loopEvents();
-       
 
         // Tries to reload the video if it failed to
         if (videoTimeNeg.getText() == "00:00:00") {
@@ -142,7 +142,7 @@ public class PrimaryController {
          */
         Platform.runLater(() -> {
             Stage stage = (Stage) fullButton.getScene().getWindow();
-           
+
             // Add event listener to detect fullscreen change
             stage.fullScreenProperty().addListener((obs, wasFullScreen, isNowFullScreen) -> {
                 if (!isNowFullScreen) {
@@ -151,14 +151,13 @@ public class PrimaryController {
             });
             // Listen for ESC key press to exit fullscreen
             stage.getScene().setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ESCAPE){
+                if (event.getCode() == KeyCode.ESCAPE) {
                     if (isFullscreen) {
                         toggleFullScreen();
                     }
                 }
             });
         });
-
     }
 
     // -------------------------------EVENT FUNCTIONS-------------------------------
@@ -329,7 +328,7 @@ public class PrimaryController {
     // ------------------------------HELPER FUNCTIONS------------------------------
     /**
      * Formats and updates the time labels
-     * 
+     *
      * @param value The time value in seconds
      * @param video the label to update
      */
@@ -360,7 +359,7 @@ public class PrimaryController {
 
     /**
      * Gets end time of video
-     * 
+     *
      * @return end time in seconds
      */
     private double getEndTime() {
@@ -377,56 +376,71 @@ public class PrimaryController {
         }
     }
 
+    /**
+     * Sets the time for the slider and media player
+     */
     private void setTime(double time) {
         slider.setValue(time);
         mediaplayer.seek(Duration.seconds(slider.getValue()));
     }
 
     /**
-     * Sets the window to fullscreen 
+     * Sets the window to fullscreen
      */
     @FXML
     private void toggleFullScreen() {
-        Stage stage = (Stage) fullButton.getScene().getWindow();
-        isFullscreen = !isFullscreen;
-        stage.setFullScreen(isFullscreen);
+        try {
+            Stage stage = (Stage) fullButton.getScene().getWindow();
+            isFullscreen = !isFullscreen;
+            stage.setFullScreen(isFullscreen);
 
-        if (isFullscreen) {
-            mediaview.fitWidthProperty().bind(stage.widthProperty());
-            mediaview.fitHeightProperty().bind(stage.heightProperty());
+            if (isFullscreen) {
+                mediaview.fitWidthProperty().bind(stage.widthProperty());
+                mediaview.fitHeightProperty().bind(stage.heightProperty());
 
-        } else {
-            mediaview.fitWidthProperty().unbind();
-            mediaview.fitHeightProperty().unbind();
-            mediaview.setFitWidth(VideoPlayer.getScene().getWidth());
-            mediaview.setFitHeight(VideoPlayer.getScene().getHeight() - 200);
+            } else {
+                mediaview.fitWidthProperty().unbind();
+                mediaview.fitHeightProperty().unbind();
+                mediaview.setFitWidth(VideoPlayer.getScene().getWidth());
+                mediaview.setFitHeight(VideoPlayer.getScene().getHeight() - MARGIN);
+            }
+
+        } catch (NullPointerException e) {
+            System.out.println("Fix later");
         }
+
     }
 
     /**
      * Detects a key pressed and then skips ahead based on the key
      */
     @FXML
-    private void arrowSkip(){
+    private void arrowSkip() {
         Scene scene = slider.getScene();
-       
-        scene.setOnKeyPressed(event ->{
-             // If A is pressed rewind 10 secs
-            if(event.getCode() == KeyCode.A){
+
+        scene.setOnKeyPressed(event -> {
+            // If A is pressed rewind 10 secs
+            if (event.getCode() == KeyCode.J) {
                 rewind(SKIPSEC);
             }
-             // If D is pressed fast forward 10 secs
-            if(event.getCode() == KeyCode.D){
+            // If D is pressed fast forward 10 secs
+            if (event.getCode() == KeyCode.L) {
                 fastForward(SKIPSEC);
             }
+            if (event.getCode() == KeyCode.K) {
+                buttonPlay();
+            }   
+            if (event.getCode() == KeyCode.F){
+                toggleFullScreen();
+            }
         });
-    
+
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------
     /**
      * Switches view to the select video file page
-     * 
+     *
      * @throws IOException
      */
     @FXML
@@ -443,7 +457,7 @@ public class PrimaryController {
 
     /**
      * Toggles the video pause/play feature
-     * 
+     *
      * @param isPlayed true = playing, false = paused
      * @param event
      */
@@ -465,10 +479,11 @@ public class PrimaryController {
     }
 
     /**
-     * Helper function to assist in skipping backward a given amount of seconds 
+     * Helper function to assist in skipping backward a given amount of seconds
+     *
      * @param sec
      */
-    public void rewind(int sec){
+    public void rewind(int sec) {
         if (slider.getValue() >= sec) {
             // Goes back ten seconds
             setTime(slider.getValue() - sec);
@@ -478,13 +493,14 @@ public class PrimaryController {
         }
     }
 
-     /**
-     * Helper function to assist in skipping forward a given amount of seconds 
+    /**
+     * Helper function to assist in skipping forward a given amount of seconds
+     *
      * @param sec
      */
-    public void fastForward(int sec){
+    public void fastForward(int sec) {
         double endTime = getEndTime();
-            // Case 1: normal
+        // Case 1: normal
         if (slider.getValue() <= endTime - sec) {
             // Goes forward ten seconds
             setTime(slider.getValue() + sec);
@@ -497,7 +513,7 @@ public class PrimaryController {
     // -------------------------------PATH FUNCTIONS-------------------------------
     /**
      * Sets path of selected file to current path of the player
-     * 
+     *
      * @param path Path that current_path will be set to
      */
     public static void setPath(String path) {
@@ -506,7 +522,7 @@ public class PrimaryController {
 
     /**
      * Retrives file path
-     * 
+     *
      * @return Current file path
      */
     public static String getPath() {
