@@ -11,7 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -79,6 +81,11 @@ public class PrimaryController {
     private Slider volume;
     @FXML
     private CheckBox muteCheckBox;
+
+    // Speed-modifying group
+    @FXML
+    private ToggleGroup speed;
+    
 
     // ------------------------------HELPER VARIABLES-------------------------------
     // Time slider booleans
@@ -435,6 +442,16 @@ public class PrimaryController {
             }
         });
 
+    }
+
+    /**
+     * Changes the video playback speed
+     */
+    @FXML
+    private void changeSpeed(){
+        //Takes the rate displayed by the selected menu item as the new speed
+        RadioMenuItem rate = (RadioMenuItem) speed.getSelectedToggle();
+        mediaplayer.setRate(Double.valueOf(rate.getText()));
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------

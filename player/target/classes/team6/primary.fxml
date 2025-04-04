@@ -89,18 +89,18 @@
                           <items>
                               <Menu mnemonicParsing="false" text="Speed">
                                 <items>
-                                    <RadioMenuItem mnemonicParsing="false" text="0.25">
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" text="0.25">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="speed" />
                                        </toggleGroup>
                                     </RadioMenuItem>
-                                    <RadioMenuItem mnemonicParsing="false" text="0.5" toggleGroup="$speed" />
-                                    <RadioMenuItem mnemonicParsing="false" text="0.75" toggleGroup="$speed" />
-                                    <RadioMenuItem mnemonicParsing="false" selected="true" text="Normal" toggleGroup="$speed" />
-                                    <RadioMenuItem mnemonicParsing="false" text="1.25" toggleGroup="$speed" />
-                                    <RadioMenuItem mnemonicParsing="false" text="1.5" toggleGroup="$speed" />
-                                    <RadioMenuItem mnemonicParsing="false" text="1.75" toggleGroup="$speed" />
-                                    <RadioMenuItem mnemonicParsing="false" text="2" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" text="0.5" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" text="0.75" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" selected="true" text="1" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" text="1.25" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" text="1.5" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" text="1.75" toggleGroup="$speed" />
+                                    <RadioMenuItem mnemonicParsing="false" onAction="#changeSpeed" text="2" toggleGroup="$speed" />
                                 </items>
                               </Menu>
                               <Menu mnemonicParsing="false" text="Volume">
