@@ -1,7 +1,10 @@
 package team6;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -10,25 +13,36 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.stream.JsonReader;
 
 public class SecondaryController {
 
     // ----------------------------------CONSTANTS----------------------------------
     // Amount of recently opened files to display
-    private static final int RECENT_VIDEO_DISPLAY_SIZE = 5;
+    // Max amount: 100 <-- not implemented yet
+    private static int RECENT_VIDEO_DISPLAY_SIZE = 5;
 
     // To edit the list of extensions: Ex: {"*.mp4"} -> {"*.mp4", "*.mkv"}
-    private static final ExtensionFilter ALLOWED_EXTENSIONS = new ExtensionFilter("Video Files",
+    private static ExtensionFilter ALLOWED_EXTENSIONS = new ExtensionFilter("Video Files",
             new String[] { "*.mp4" });
 
     // Initial path for the file chooser
-    private static final String INITIAL_PATH = "C:\\";
+    private static String INITIAL_PATH = "C:\\";
 
     // Whether or not to show full path for open recent file
-    private static final boolean SHOW_FULL_PATH = false;
+    private static boolean SHOW_FULL_PATH = false;
 
     private static final int PATH_INDEX = 0;
     private static final int FIRST_FILE_INDEX = 1;
+
+    // Whether or not to use the JSON system
+    private static final boolean USE_JSON = false;
+    // The JSON file's path
+    private static final String JSON_FILE = "player\\src\\main\\java\\team6\\config.json";
 
     // --------------------------------FXML ELEMENTS--------------------------------
     // Dropdown menu for recently opened files
@@ -42,6 +56,8 @@ public class SecondaryController {
     // List storing previously opened files
     // For every element: path at index 0, file name at index 1
     private static ArrayList<ArrayList<String>> previousVideos = new ArrayList<ArrayList<String>>();
+    // List for storing previously opened files gotten from JSON file
+    private ArrayList<ArrayList<String>> displayVideos = new ArrayList<ArrayList<String>>();
 
     // ------------------------------INITIALIZE WINDOW------------------------------
     /**
@@ -49,8 +65,60 @@ public class SecondaryController {
      */
     @FXML
     public void initialize() {
+        // load contents of JSON file
+        if(USE_JSON) {
+            try (JsonReader jr = new JsonReader(new FileReader(JSON_FILE))) {
+                jr.beginObject();
+                // Get recent videos and add them to displayVideos
+                String key = jr.nextName();
+                jr.beginArray();
+                while(jr.hasNext()) {
+                    jr.beginObject();
+                    jr.nextName();
+                    String fn = jr.nextString();
+                    jr.nextName();
+                    String fp = jr.nextString();
+                    jr.endObject();
+                    ArrayList<String> file_np = new ArrayList<String>();
+                    file_np.add(PATH_INDEX,fp);
+                    file_np.add(FIRST_FILE_INDEX,fn);
+                    displayVideos.add(file_np);
+                }
+                jr.endArray();
+                // Get recent video display size
+                jr.nextName();
+                RECENT_VIDEO_DISPLAY_SIZE = jr.nextInt();
+                // Get allowed extensions
+                jr.nextName();
+                jr.beginArray();
+                ArrayList<String> tempExt = new ArrayList<String>();
+                while(jr.hasNext()) {
+                    tempExt.add(jr.nextString());
+                }
+                String[] ExtList = new String[tempExt.size()];
+                for(int i = 0; i < tempExt.size();i++) {
+                    ExtList[i] = tempExt.get(i);
+                }
+                ALLOWED_EXTENSIONS = new ExtensionFilter("Video Files",ExtList);
+                jr.endArray();
+                // Get show full path
+                jr.nextName();
+                SHOW_FULL_PATH = jr.nextBoolean();
+                // Get initial path
+                jr.nextName();
+                INITIAL_PATH = jr.nextString();
+                jr.endObject();
+
+            } catch (IOException e) {e.printStackTrace();}
+        }
+
         // Show recently opened files
-        int s = previousVideos.size();
+        int s;
+        if(USE_JSON) {
+            s = displayVideos.size();
+        }else {
+            s = previousVideos.size();
+        }
 
         // Get the minimum of RECENT_VIDEO_DISPLAY_SIZE and amount of recent files
         if (RECENT_VIDEO_DISPLAY_SIZE < s) {
@@ -63,11 +131,21 @@ public class SecondaryController {
         // Loops through and adds all listed elements
         for (int i = 0; i < s; i++) {
 
+            String file_name;
+            String file_path;
+            if(USE_JSON) {
+                file_name = displayVideos.get(i).get(FIRST_FILE_INDEX);
+                file_path = displayVideos.get(i).get(PATH_INDEX);
+            }else {
+                file_name = previousVideos.get(i).get(FIRST_FILE_INDEX);
+                file_path = previousVideos.get(i).get(PATH_INDEX);
+            }
+
             // For file name
             if (!SHOW_FULL_PATH) {
-                displayList[i] = previousVideos.get(i).get(FIRST_FILE_INDEX);
+                displayList[i] = file_name;
             } else /* Show full file path */ {
-                displayList[i] = previousVideos.get(i).get(PATH_INDEX);
+                displayList[i] = file_path;
             }
         }
 
@@ -78,9 +156,21 @@ public class SecondaryController {
             // For file name
             if (!SHOW_FULL_PATH) {
                 for (int i = 0; i < videoDrop.getItems().size(); i++) {
-                    if (previousVideos.get(i).get(FIRST_FILE_INDEX) == videoDrop.getSelectionModel().getSelectedItem()
+                    String file_name;
+                    if(USE_JSON) {
+                        file_name = displayVideos.get(i).get(FIRST_FILE_INDEX);
+                    }else {
+                        file_name = previousVideos.get(i).get(FIRST_FILE_INDEX);
+                    }
+                    if (file_name == videoDrop.getSelectionModel().getSelectedItem()
                             .toString()) {
-                        PrimaryController.setPath(previousVideos.get(i).get(PATH_INDEX));
+                        String full_path;
+                        if(USE_JSON) {
+                            full_path = displayVideos.get(i).get(PATH_INDEX);
+                        }else {
+                            full_path = previousVideos.get(i).get(PATH_INDEX);
+                        }
+                        PrimaryController.setPath(full_path);
                         break;
                     }
                 }
@@ -135,9 +225,26 @@ public class SecondaryController {
                         ds = ds.substring(j + 1, ds.length());
                     }
                 }
-
-                path.add(FIRST_FILE_INDEX, ds);
-                previousVideos.add(PATH_INDEX, path);
+                if(USE_JSON) {
+                    JsonObject newFileEntry = new JsonObject();
+                    newFileEntry.addProperty("file name",ds);
+                    newFileEntry.addProperty("file path",file.getAbsolutePath());
+                    try (FileReader r = new FileReader(JSON_FILE)) {
+                        JsonObject mainObject = JsonParser.parseReader(r).getAsJsonObject();
+                        JsonArray videoArray = mainObject.getAsJsonArray("recent videos");
+                        JsonArray mainArray = new JsonArray();
+                        mainArray.add(newFileEntry);
+                        mainArray.addAll(videoArray);
+                        mainObject.add("recent videos",mainArray);
+                        try (FileWriter fw = new FileWriter(JSON_FILE)) {
+                            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                            gson.toJson(mainObject,fw);
+                        } catch(IOException e) {e.printStackTrace();}
+                    } catch(IOException e) {e.printStackTrace();}
+                }else {
+                    path.add(FIRST_FILE_INDEX, ds);
+                    previousVideos.add(PATH_INDEX, path);
+                }
                 PrimaryController.setPath(file.getAbsolutePath());
             }
         }
