@@ -439,6 +439,12 @@ public class PrimaryController {
             if (event.getCode() == KeyCode.F) {
                 toggleFullScreen();
             }
+
+            // Mute toggle
+            if (event.getCode() == KeyCode.M) {
+                mute();
+                muteCheckBox.setSelected(!muteCheckBox.isSelected());
+            }
         });
 
     }
