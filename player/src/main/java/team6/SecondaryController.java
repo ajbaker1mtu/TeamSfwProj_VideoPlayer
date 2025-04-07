@@ -40,7 +40,7 @@ public class SecondaryController {
     private static final int FIRST_FILE_INDEX = 1;
 
     // Whether or not to use the JSON system
-    private static final boolean USE_JSON = false;
+    private static final boolean USE_JSON = true;
     // The JSON file's path
     private static final String JSON_FILE = "player\\src\\main\\java\\team6\\config.json";
 
@@ -54,7 +54,7 @@ public class SecondaryController {
     private FileChooser fc = new FileChooser();
 
     // List storing previously opened files
-    // For every element: path at index 0, file name at index 1
+    // For every element: path at index PATH_INDEX, file name at index FIRST_FILE_INDEX
     private static ArrayList<ArrayList<String>> previousVideos = new ArrayList<ArrayList<String>>();
     // List for storing previously opened files gotten from JSON file
     private ArrayList<ArrayList<String>> displayVideos = new ArrayList<ArrayList<String>>();
@@ -107,6 +107,7 @@ public class SecondaryController {
             }
         }
 
+        // Load displayList into the recent video dropdown menu
         videoDrop.getItems().addAll(displayList);
 
         // When video list is clicked
