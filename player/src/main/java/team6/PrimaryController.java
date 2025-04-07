@@ -350,21 +350,6 @@ public class PrimaryController {
     }
 
     // ------------------------------HELPER FUNCTIONS------------------------------
-    /**
-     * Formats and updates the time labels
-     *
-     * @param value The time value in seconds
-     * @param video the label to update
-     */
-    @FXML
-    public void vidTime(double value, Label video) {
-        int timeDouble = (int) value;
-        int minutes = timeDouble / TIMECONVERTER;
-        int seconds = timeDouble % TIMECONVERTER;
-        String formattedTime = minutes + ":" + String.format("%02d", seconds);
-        video.setText(formattedTime);
-
-    }
 
     /**
      * Changes the volume of the media player
@@ -409,6 +394,21 @@ public class PrimaryController {
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------
+      /**
+     * Formats and updates the time labels
+     *
+     * @param value The time value in seconds
+     * @param video the label to update
+     */
+    @FXML
+    public void vidTime(double value, Label video) {
+        int timeDouble = (int) value;
+        int minutes = timeDouble / TIMECONVERTER;
+        int seconds = timeDouble % TIMECONVERTER;
+        String formattedTime = minutes + ":" + String.format("%02d", seconds);
+        video.setText(formattedTime);
+
+    }
     /**
      * Sets the window to fullscreen
      */
