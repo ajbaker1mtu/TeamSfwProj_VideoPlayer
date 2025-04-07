@@ -40,7 +40,7 @@ public class SecondaryController {
     private static final int FIRST_FILE_INDEX = 1;
 
     // Whether or not to use the JSON system
-    private static final boolean USE_JSON = true;
+    private static final boolean USE_JSON = false;
     // The JSON file's path
     private static final String JSON_FILE = "player\\src\\main\\java\\team6\\config.json";
 
