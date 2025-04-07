@@ -109,7 +109,10 @@
                                        <graphic>
                                           <VBox prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: white;">
                                              <children>
-                                                <Slider fx:id="volume" blockIncrement="0.1" majorTickUnit="2.0" max="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="1" prefHeight="20.0" prefWidth="150.0" value="1.0" />
+                                                <Slider fx:id="volume" blockIncrement="0.1" majorTickUnit="2.0" max="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="1" prefHeight="20.0" prefWidth="150.0" value="1.0">
+                                                   <cursor>
+                                                      <Cursor fx:constant="OPEN_HAND" />
+                                                   </cursor></Slider>
                                                 <CheckBox fx:id="muteCheckBox" mnemonicParsing="false" text="Mute">
                                                    <textFill>
                                                       <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="1.0">
@@ -143,15 +146,15 @@
                                        <graphic>
                                           <VBox prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: white;">
                                              <children>
-                                                <Slider fx:id="hueSlider" min="-1.0" max="1.0" value="0.0" prefWidth="150.0" onMouseReleased="#changeHue">
+                                                <Slider fx:id="hueSlider" max="1.0" min="-1.0" onMouseReleased="#changeHue" prefWidth="150.0" value="0.0">
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
                                                 </Slider>
                                                 <HBox alignment="CENTER" spacing="10.0">
                                                    <children>
-                                                      <Label text="Adjust Hue" style="-fx-text-fill: black;" />
-                                                      <Button text="Reset" onAction="#resetHue" style="-fx-font-size: 10px;">
+                                                      <Label style="-fx-text-fill: black;" text="Adjust Hue" />
+                                                      <Button onAction="#resetHue" style="-fx-font-size: 10px;" text="Reset">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>

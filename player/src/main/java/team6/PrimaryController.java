@@ -89,7 +89,7 @@ public class PrimaryController {
 
     // Color adjustment for hue
     @FXML
-    private Slider hueSlider; 
+    private Slider hueSlider;
 
     // ------------------------------HELPER VARIABLES-------------------------------
     // Time slider booleans
@@ -142,41 +142,18 @@ public class PrimaryController {
         // Linking effect for hue adjustment to the slider
         mediaview.setEffect(colorAdjust);
 
-
         // All dynamic events
         mediaplayerEvents();
-        sliderEvents();
+        timeEvents();
         skipEvents();
         volumeEvents();
         loopEvents();
-        
+        fullscreenEvents();
 
         // Tries to reload the video if it failed to
         if (videoTimeNeg.getText() == "00:00:00") {
             VideoPlayer.setRoot("primary");
         }
-
-        /**
-         * Handles Fullscreen and hitting esc to exit it
-         */
-        Platform.runLater(() -> {
-            Stage stage = (Stage) fullButton.getScene().getWindow();
-
-            // Add event listener to detect fullscreen change
-            stage.fullScreenProperty().addListener((obs, wasFullScreen, isNowFullScreen) -> {
-                if (!isNowFullScreen) {
-                    toggleFullScreen();
-                }
-            });
-            // Listen for ESC key press to exit fullscreen
-            stage.getScene().setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ESCAPE) {
-                    if (isFullscreen) {
-                        toggleFullScreen();
-                    }
-                }
-            });
-        });
     }
 
     // -------------------------------EVENT FUNCTIONS-------------------------------
@@ -223,7 +200,7 @@ public class PrimaryController {
      * <li>4. On Mouse Released</li>
      * </o1>
      */
-    private void sliderEvents() {
+    private void timeEvents() {
         // 1. Handle slider dragging (update video time)
         slider.valueProperty().addListener((obs, oldVal, newVal) -> {
             vidTime(newVal.doubleValue(), videoTimeNeg);
@@ -305,6 +282,7 @@ public class PrimaryController {
         // 1-3 is all volume changes
         // 1.
         volume.setOnMousePressed(event -> {
+            volume.setCursor(Cursor.CLOSED_HAND);
             changeVolume();
         });
 
@@ -315,6 +293,7 @@ public class PrimaryController {
 
         // 3.
         volume.setOnMouseReleased(event -> {
+            volume.setCursor(Cursor.OPEN_HAND);
             changeVolume();
         });
 
@@ -342,6 +321,32 @@ public class PrimaryController {
             checkLoop();
         });
 
+    }
+
+    /**
+     * Handles Fullscreen and hitting esc to exit it
+     */
+    private void fullscreenEvents() {
+        Platform.runLater(() -> {
+
+            Stage stage = (Stage) fullButton.getScene().getWindow();
+
+            // Add event listener to detect fullscreen change
+            stage.fullScreenProperty().addListener((obs, wasFullScreen, isNowFullScreen) -> {
+                if (!isNowFullScreen) {
+                    toggleFullScreen();
+                }
+            });
+
+            // Listen for ESC key press to exit fullscreen
+            stage.getScene().setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    if (isFullscreen) {
+                        toggleFullScreen();
+                    }
+                }
+            });
+        });
     }
 
     // ------------------------------HELPER FUNCTIONS------------------------------
@@ -472,7 +477,7 @@ public class PrimaryController {
         RadioMenuItem rate = (RadioMenuItem) speed.getSelectedToggle();
         mediaplayer.setRate(Double.valueOf(rate.getText()));
     }
-    
+
     /**
      * Switches view to the select video file page
      *
@@ -546,7 +551,8 @@ public class PrimaryController {
     }
 
     /**
-     * Change the hue of the video. This is linked to the hue slider in the FXML file.
+     * Change the hue of the video. This is linked to the hue slider in the FXML
+     * file.
      */
     @FXML
     private void changeHue() {
