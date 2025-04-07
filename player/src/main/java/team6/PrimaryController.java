@@ -68,7 +68,7 @@ public class PrimaryController {
     @FXML
     private Button buttonPlay;
 
-    // Fullscreen Button 
+    // Fullscreen Button
     @FXML
     private Button fullButton;
 
@@ -85,7 +85,6 @@ public class PrimaryController {
     // Speed-modifying group
     @FXML
     private ToggleGroup speed;
-    
 
     // ------------------------------HELPER VARIABLES-------------------------------
     // Time slider booleans
@@ -286,7 +285,7 @@ public class PrimaryController {
      * <li>1. On Mouse Pressed (volume)</li>
      * <li>2. On Mouse Dragged (volume)</li>
      * <li>3. On Mouse Released (volume)</li>
-     * <li>4. On Mouse Clicked (muteCheckBox)</li>
+     * <li>4. On Action (muteCheckBox)</li>
      * </o1>
      */
     private void volumeEvents() {
@@ -307,7 +306,7 @@ public class PrimaryController {
         });
 
         // 4. Mute button
-        muteCheckBox.setOnMouseClicked(event -> {
+        muteCheckBox.setOnAction(event -> {
             mute();
         });
     }
@@ -436,8 +435,8 @@ public class PrimaryController {
             }
             if (event.getCode() == KeyCode.K) {
                 buttonPlay();
-            }   
-            if (event.getCode() == KeyCode.F){
+            }
+            if (event.getCode() == KeyCode.F) {
                 toggleFullScreen();
             }
         });
@@ -448,8 +447,8 @@ public class PrimaryController {
      * Changes the video playback speed
      */
     @FXML
-    private void changeSpeed(){
-        //Takes the rate displayed by the selected menu item as the new speed
+    private void changeSpeed() {
+        // Takes the rate displayed by the selected menu item as the new speed
         RadioMenuItem rate = (RadioMenuItem) speed.getSelectedToggle();
         mediaplayer.setRate(Double.valueOf(rate.getText()));
     }
