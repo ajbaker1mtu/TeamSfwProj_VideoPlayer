@@ -244,7 +244,7 @@ public class SecondaryController {
             INITIAL_PATH = jr.nextString();
 
             // Get recent videos and add them to displayVideos
-            String key = jr.nextName();
+            jr.nextName();
             jr.beginArray();
             while(jr.hasNext()) {
                 jr.beginObject();
