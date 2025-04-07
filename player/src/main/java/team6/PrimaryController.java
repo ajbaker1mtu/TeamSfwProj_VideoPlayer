@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -86,6 +87,10 @@ public class PrimaryController {
     @FXML
     private ToggleGroup speed;
 
+    // Color adjustment for hue
+    @FXML
+    private Slider hueSlider; 
+
     // ------------------------------HELPER VARIABLES-------------------------------
     // Time slider booleans
     private boolean isPlayed = false;
@@ -97,6 +102,9 @@ public class PrimaryController {
 
     // Loop on/off boolean
     private boolean loop = false;
+
+    // ColorAdjust effect for hue adjustment
+    private ColorAdjust colorAdjust = new ColorAdjust();
 
     // ------------------------------INITIALIZE WINDOW------------------------------
     /**
@@ -131,12 +139,17 @@ public class PrimaryController {
         // Preserves the ratio of the video
         mediaview.setPreserveRatio(true);
 
+        // Linking effect for hue adjustment to the slider
+        mediaview.setEffect(colorAdjust);
+
+
         // All dynamic events
         mediaplayerEvents();
         sliderEvents();
         skipEvents();
         volumeEvents();
         loopEvents();
+        
 
         // Tries to reload the video if it failed to
         if (videoTimeNeg.getText() == "00:00:00") {
@@ -390,6 +403,7 @@ public class PrimaryController {
         mediaplayer.seek(Duration.seconds(slider.getValue()));
     }
 
+    // -------------------------------FXML FUNCTIONS-------------------------------
     /**
      * Sets the window to fullscreen
      */
@@ -458,8 +472,7 @@ public class PrimaryController {
         RadioMenuItem rate = (RadioMenuItem) speed.getSelectedToggle();
         mediaplayer.setRate(Double.valueOf(rate.getText()));
     }
-
-    // -------------------------------FXML FUNCTIONS-------------------------------
+    
     /**
      * Switches view to the select video file page
      *
@@ -530,6 +543,25 @@ public class PrimaryController {
             // Goes to end
             setTime(endTime);
         }
+    }
+
+    /**
+     * Change the hue of the video. This is linked to the hue slider in the FXML file.
+     */
+    @FXML
+    private void changeHue() {
+        double hueValue = hueSlider.getValue(); // Range: -1 to 1
+        colorAdjust.setHue(hueValue);
+    }
+
+    /**
+     * Resets the hue of the video to 0.0 (default)
+     * This is linked to the reset button in the FXML file.
+     */
+    @FXML
+    private void resetHue() {
+        hueSlider.setValue(0.0);
+        colorAdjust.setHue(0.0);
     }
 
     // -------------------------------PATH FUNCTIONS-------------------------------
