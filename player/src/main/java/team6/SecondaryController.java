@@ -67,49 +67,7 @@ public class SecondaryController {
     public void initialize() {
         // load contents of JSON file
         if(USE_JSON) {
-            try (JsonReader jr = new JsonReader(new FileReader(JSON_FILE))) {
-                jr.beginObject();
-                // Get recent videos and add them to displayVideos
-                String key = jr.nextName();
-                jr.beginArray();
-                while(jr.hasNext()) {
-                    jr.beginObject();
-                    jr.nextName();
-                    String fn = jr.nextString();
-                    jr.nextName();
-                    String fp = jr.nextString();
-                    jr.endObject();
-                    ArrayList<String> file_np = new ArrayList<String>();
-                    file_np.add(PATH_INDEX,fp);
-                    file_np.add(FIRST_FILE_INDEX,fn);
-                    displayVideos.add(file_np);
-                }
-                jr.endArray();
-                // Get recent video display size
-                jr.nextName();
-                RECENT_VIDEO_DISPLAY_SIZE = jr.nextInt();
-                // Get allowed extensions
-                jr.nextName();
-                jr.beginArray();
-                ArrayList<String> tempExt = new ArrayList<String>();
-                while(jr.hasNext()) {
-                    tempExt.add(jr.nextString());
-                }
-                String[] ExtList = new String[tempExt.size()];
-                for(int i = 0; i < tempExt.size();i++) {
-                    ExtList[i] = tempExt.get(i);
-                }
-                ALLOWED_EXTENSIONS = new ExtensionFilter("Video Files",ExtList);
-                jr.endArray();
-                // Get show full path
-                jr.nextName();
-                SHOW_FULL_PATH = jr.nextBoolean();
-                // Get initial path
-                jr.nextName();
-                INITIAL_PATH = jr.nextString();
-                jr.endObject();
-
-            } catch (IOException e) {e.printStackTrace();}
+            loadJSON();
         }
 
         // Show recently opened files
@@ -153,17 +111,25 @@ public class SecondaryController {
 
         // When video list is clicked
         videoDrop.setOnAction(event -> {
+
+            // Gets the selected video
+            String selected_video = videoDrop.getSelectionModel().getSelectedItem().toString();
+            
             // For file name
             if (!SHOW_FULL_PATH) {
+                // Search video list for selected video, and get path of that file
                 for (int i = 0; i < videoDrop.getItems().size(); i++) {
+                    // Get file name
                     String file_name;
                     if(USE_JSON) {
                         file_name = displayVideos.get(i).get(FIRST_FILE_INDEX);
                     }else {
                         file_name = previousVideos.get(i).get(FIRST_FILE_INDEX);
                     }
-                    if (file_name == videoDrop.getSelectionModel().getSelectedItem()
-                            .toString()) {
+                    
+                    // Check to see if the current file is the selected video
+                    if (file_name == selected_video) {
+                        // Get full path
                         String full_path;
                         if(USE_JSON) {
                             full_path = displayVideos.get(i).get(PATH_INDEX);
@@ -175,7 +141,7 @@ public class SecondaryController {
                     }
                 }
             } else /* Show full file path */ {
-                PrimaryController.setPath(videoDrop.getSelectionModel().getSelectedItem().toString());
+                PrimaryController.setPath(selected_video);
             }
         });
     }
@@ -243,10 +209,62 @@ public class SecondaryController {
                     } catch(IOException e) {e.printStackTrace();}
                 }else {
                     path.add(FIRST_FILE_INDEX, ds);
-                    previousVideos.add(PATH_INDEX, path);
+                    previousVideos.add(0, path);
                 }
                 PrimaryController.setPath(file.getAbsolutePath());
             }
         }
     }
+
+    // Loads JSON files
+    private void loadJSON() {
+        try (JsonReader jr = new JsonReader(new FileReader(JSON_FILE))) {
+            jr.beginObject();
+            // Get recent videos and add them to displayVideos
+            String key = jr.nextName();
+            jr.beginArray();
+            while(jr.hasNext()) {
+                jr.beginObject();
+                jr.nextName();
+                String fn = jr.nextString();
+                jr.nextName();
+                String fp = jr.nextString();
+                jr.endObject();
+                ArrayList<String> file_np = new ArrayList<String>();
+                file_np.add(PATH_INDEX,fp);
+                file_np.add(FIRST_FILE_INDEX,fn);
+                displayVideos.add(file_np);
+            }
+            jr.endArray();
+    
+            // Get recent video display size
+            jr.nextName();
+            RECENT_VIDEO_DISPLAY_SIZE = jr.nextInt();
+    
+            // Get allowed extensions
+            jr.nextName();
+            jr.beginArray();
+            ArrayList<String> tempExt = new ArrayList<String>();
+            while(jr.hasNext()) {
+                tempExt.add(jr.nextString());
+            }
+            String[] ExtList = new String[tempExt.size()];
+            for(int i = 0; i < tempExt.size();i++) {
+                ExtList[i] = tempExt.get(i);
+            }
+            ALLOWED_EXTENSIONS = new ExtensionFilter("Video Files",ExtList);
+            jr.endArray();
+    
+            // Get show full path
+            jr.nextName();
+            SHOW_FULL_PATH = jr.nextBoolean();
+    
+            // Get initial path
+            jr.nextName();
+            INITIAL_PATH = jr.nextString();
+            jr.endObject();
+    
+        } catch (IOException e) {e.printStackTrace();}
+    }
 }
+
