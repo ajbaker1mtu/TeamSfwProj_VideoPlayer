@@ -23,7 +23,7 @@ public class SecondaryController {
 
     // ----------------------------------CONSTANTS----------------------------------
     // Amount of recently opened files to display
-    // Max amount: 100 <-- not implemented yet
+    // Max amount: 100 <-- not implemented yet <-- subject to change
     private static int RECENT_VIDEO_DISPLAY_SIZE = 5;
 
     // To edit the list of extensions: Ex: {"*.mp4"} -> {"*.mp4", "*.mkv"}
@@ -40,7 +40,7 @@ public class SecondaryController {
     private static final int FIRST_FILE_INDEX = 1;
 
     // Whether or not to use the JSON system
-    private static final boolean USE_JSON = false;
+    private static final boolean USE_JSON = true;
     // The JSON file's path
     private static final String JSON_FILE = "player\\src\\main\\java\\team6\\config.json";
 
@@ -192,25 +192,19 @@ public class SecondaryController {
                     }
                 }
                 if(USE_JSON) {
+                    // Create new JSON Object for storing the new video file
                     JsonObject newFileEntry = new JsonObject();
                     newFileEntry.addProperty("file name",ds);
                     newFileEntry.addProperty("file path",file.getAbsolutePath());
-                    try (FileReader r = new FileReader(JSON_FILE)) {
-                        JsonObject mainObject = JsonParser.parseReader(r).getAsJsonObject();
-                        JsonArray videoArray = mainObject.getAsJsonArray("recent videos");
-                        JsonArray mainArray = new JsonArray();
-                        mainArray.add(newFileEntry);
-                        mainArray.addAll(videoArray);
-                        mainObject.add("recent videos",mainArray);
-                        try (FileWriter fw = new FileWriter(JSON_FILE)) {
-                            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                            gson.toJson(mainObject,fw);
-                        } catch(IOException e) {e.printStackTrace();}
-                    } catch(IOException e) {e.printStackTrace();}
-                }else {
+
+                    writeToJSON(newFileEntry);
+                }else { // if USE_JSON is false
+                    // Add file to previousVideos
                     path.add(FIRST_FILE_INDEX, ds);
                     previousVideos.add(0, path);
                 }
+
+                // Set primary controller's path to selected video
                 PrimaryController.setPath(file.getAbsolutePath());
             }
         }
@@ -220,23 +214,7 @@ public class SecondaryController {
     private void loadJSON() {
         try (JsonReader jr = new JsonReader(new FileReader(JSON_FILE))) {
             jr.beginObject();
-            // Get recent videos and add them to displayVideos
-            String key = jr.nextName();
-            jr.beginArray();
-            while(jr.hasNext()) {
-                jr.beginObject();
-                jr.nextName();
-                String fn = jr.nextString();
-                jr.nextName();
-                String fp = jr.nextString();
-                jr.endObject();
-                ArrayList<String> file_np = new ArrayList<String>();
-                file_np.add(PATH_INDEX,fp);
-                file_np.add(FIRST_FILE_INDEX,fn);
-                displayVideos.add(file_np);
-            }
-            jr.endArray();
-    
+
             // Get recent video display size
             jr.nextName();
             RECENT_VIDEO_DISPLAY_SIZE = jr.nextInt();
@@ -262,9 +240,47 @@ public class SecondaryController {
             // Get initial path
             jr.nextName();
             INITIAL_PATH = jr.nextString();
+
+            // Get recent videos and add them to displayVideos
+            String key = jr.nextName();
+            jr.beginArray();
+            while(jr.hasNext()) {
+                jr.beginObject();
+                jr.nextName();
+                String fn = jr.nextString();
+                jr.nextName();
+                String fp = jr.nextString();
+                jr.endObject();
+                ArrayList<String> file_np = new ArrayList<String>();
+                file_np.add(PATH_INDEX,fp);
+                file_np.add(FIRST_FILE_INDEX,fn);
+                displayVideos.add(file_np);
+            }
+            jr.endArray();
             jr.endObject();
     
         } catch (IOException e) {e.printStackTrace();}
     }
-}
 
+    // Write a given video (as JsonObject) into the JSON file
+    private void writeToJSON(JsonObject newFileEntry) {
+        // Update recent video array in JSON file
+        try (FileReader r = new FileReader(JSON_FILE)) {
+            // Load recent video array
+            JsonObject mainObject = JsonParser.parseReader(r).getAsJsonObject();
+            JsonArray videoArray = mainObject.getAsJsonArray("recent videos");
+            JsonArray mainArray = new JsonArray();
+    
+            // Add new video to array
+            mainArray.add(newFileEntry);
+            mainArray.addAll(videoArray);
+            mainObject.add("recent videos",mainArray);
+    
+            // Write new array to JSON file
+            try (FileWriter fw = new FileWriter(JSON_FILE)) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                gson.toJson(mainObject,fw);
+            } catch(IOException e) {e.printStackTrace();}
+        } catch(IOException e) {e.printStackTrace();}
+    }
+}

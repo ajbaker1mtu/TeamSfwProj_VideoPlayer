@@ -1,11 +1,14 @@
 {
-  "recent videos": [
-    
-  ],
   "recent video display size": 5,
   "allowed extensions": [
     "*.mp4"
   ],
   "show full path": false,
-  "initial path": "C:\\"
+  "initial path": "C:\\",
+  "recent videos": [
+    {
+      "file name": "file_example_MP4_480_1_5MG.mp4",
+      "file path": "C:\\Users\\948mi\\Downloads\\file_example_MP4_480_1_5MG.mp4"
+    }
+  ]
 }
