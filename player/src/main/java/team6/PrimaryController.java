@@ -90,6 +90,8 @@ public class PrimaryController {
     // Color adjustment for hue
     @FXML
     private Slider hueSlider;
+    @FXML
+    private Button resetHue;
 
     // ------------------------------HELPER VARIABLES-------------------------------
     // Time slider booleans
@@ -149,6 +151,7 @@ public class PrimaryController {
         volumeEvents();
         loopEvents();
         fullscreenEvents();
+        hueEvents();
 
         // Tries to reload the video if it failed to
         if (videoTimeNeg.getText() == "00:00:00") {
@@ -206,21 +209,9 @@ public class PrimaryController {
             vidTime(newVal.doubleValue(), videoTimeNeg);
         });
 
-        // 2. When the slider has been pressed
+        // 2. When the slider has been pressed pause video
         slider.setOnMousePressed(event -> {
-
-            // Grips onto slider
-            slider.setCursor(Cursor.CLOSED_HAND);
-
-            // Finds time after slider has been moved
-            setTime(slider.getValue());
-
-            // sliderPause saves the original state
-            sliderPause = isPlayed;
-
-            // Pause video
-            isPlayed = true;
-            buttonPlay();
+            sliderStartMoving();
         });
 
         // 3. Changes the time to current slider position
@@ -230,18 +221,7 @@ public class PrimaryController {
 
         // 4. Seek when user releases the slider
         slider.setOnMouseReleased(event -> {
-
-            // Opens hand since slider has been released
-            slider.setCursor(Cursor.OPEN_HAND);
-
-            // Makes video go to new time
-            setTime(slider.getValue());
-
-            // State of the video is recovered
-            isPlayed = !sliderPause;
-
-            // Resumes the original state of the video at a new time
-            buttonPlay();
+            sliderEndMoving();
         });
     }
 
@@ -308,7 +288,7 @@ public class PrimaryController {
      * These are all the loop events
      * </p>
      * <o1>
-     * <li>1. onSelected</li>
+     * <li>1. On Selected</li>
      * </o1>
      */
     private void loopEvents() {
@@ -324,7 +304,13 @@ public class PrimaryController {
     }
 
     /**
-     * Handles Fullscreen and hitting esc to exit it
+     * <p>
+     * These are all the loop events
+     * </p>
+     * <o1>
+     * <li>1. Listener</li>
+     * <li>1. On Key Pressed</li>
+     * </o1>
      */
     private void fullscreenEvents() {
         Platform.runLater(() -> {
@@ -349,7 +335,136 @@ public class PrimaryController {
         });
     }
 
+    /**
+     * <p>
+     * These are all the hue events
+     * </p>
+     * <o1>
+     * <li>1. On Mouse Pressed</li>
+     * <li>1. On Mouse Dragged</li>
+     * <li>1. On Mouse Released</li>
+     * <li>1. On Action (button)</li>
+     * </o1>
+     */
+    private void hueEvents() {
+
+        // 1. hueSlider changes hue of media player
+        hueSlider.setOnMousePressed(event -> {
+            startChangeHue();
+        });
+
+        // 2. hueSlider changes the hue live
+        hueSlider.setOnMouseDragged(event -> {
+            colorAdjust.setHue(hueSlider.getValue());
+        });
+
+        // 3. hueSlider changes the hue once slider is released
+        hueSlider.setOnMouseReleased(event -> {
+            endChangeHue();
+        });
+
+        // 4. Resets the hue of the media player
+        resetHue.setOnAction(event -> {
+            resetHue();
+        });
+    }
+
     // ------------------------------HELPER FUNCTIONS------------------------------
+
+    // Time event helper functions
+
+    /**
+     * Inits the time slider starting to move
+     */
+    private void sliderStartMoving() {
+        // Grips onto slider
+        slider.setCursor(Cursor.CLOSED_HAND);
+
+        // Finds time after slider has been moved
+        setTime(slider.getValue());
+
+        // sliderPause saves the original state
+        sliderPause = isPlayed;
+
+        // Pause video
+        isPlayed = true;
+        buttonPlay();
+    }
+
+    /**
+     * Preps the media player to continue in the state it was in before using the
+     * slider
+     */
+    private void sliderEndMoving() {
+        // Opens hand
+        slider.setCursor(Cursor.OPEN_HAND);
+
+        // Makes video go to new time
+        setTime(slider.getValue());
+
+        // State of the video is recovered
+        isPlayed = !sliderPause;
+
+        // Resumes the original state of the video at a new time
+        buttonPlay();
+    }
+
+    /**
+     * Sets the time for the slider and media player
+     */
+    private void setTime(double time) {
+        slider.setValue(time);
+        mediaplayer.seek(Duration.seconds(slider.getValue()));
+    }
+
+    /**
+     * Gets end time of video
+     *
+     * @return end time in seconds
+     */
+    private double getEndTime() {
+        return currentMedia.getDuration().toSeconds();
+    }
+
+    // Skip event helper functions
+
+    /**
+     * Helper function to assist in skipping backward a given amount of seconds
+     *
+     * @param sec
+     */
+    public void rewind(int sec) {
+        // Case 1: Can rewind back 10 seconds
+        if (slider.getValue() >= sec) {
+            // Goes back ten seconds
+            setTime(slider.getValue() - sec);
+        } else /* Case 2: Can not rewind 10 seconds */ {
+            // Goes back to start
+            setTime(START);
+        }
+    }
+
+    /**
+     * Helper function to assist in skipping forward a given amount of seconds
+     *
+     * @param sec
+     */
+    public void fastForward(int sec) {
+        // Gets end time
+        double endTime = getEndTime();
+
+        // Case 1: Can skip 10 seconds forward
+        if (slider.getValue() <= endTime - sec) {
+            // Goes forward ten seconds
+            setTime(slider.getValue() + sec);
+
+        } else /* Case 2: Can not skip 10 seconds forward */ {
+            // Goes to end
+            setTime(endTime);
+        }
+    }
+
+    // Volume event helper functions
 
     /**
      * Changes the volume of the media player
@@ -366,14 +481,7 @@ public class PrimaryController {
         mediaplayer.setMute(!mediaplayer.isMute());
     }
 
-    /**
-     * Gets end time of video
-     *
-     * @return end time in seconds
-     */
-    private double getEndTime() {
-        return currentMedia.getDuration().toSeconds();
-    }
+    // Loop event helper functions
 
     /**
      * Checks if the video should loop or not
@@ -385,16 +493,36 @@ public class PrimaryController {
         }
     }
 
+    // Hue event helper functions
+
     /**
-     * Sets the time for the slider and media player
+     * Starts changing the hue based of hueSlider
      */
-    private void setTime(double time) {
-        slider.setValue(time);
-        mediaplayer.seek(Duration.seconds(slider.getValue()));
+    private void startChangeHue() {
+        // Range of hue: -1 to 1
+        hueSlider.setCursor(Cursor.CLOSED_HAND);
+        colorAdjust.setHue(hueSlider.getValue());
+    }
+
+    /**
+     * Change the hue of the video after slider is relseased
+     */
+    private void endChangeHue() {
+        // Range of hue: -1 to 1
+        hueSlider.setCursor(Cursor.OPEN_HAND);
+        colorAdjust.setHue(hueSlider.getValue());
+    }
+
+    /**
+     * Resets the hue of the media player
+     */
+    private void resetHue() {
+        hueSlider.setValue(0.0);
+        colorAdjust.setHue(0.0);
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------
-      /**
+    /**
      * Formats and updates the time labels
      *
      * @param value The time value in seconds
@@ -409,6 +537,7 @@ public class PrimaryController {
         video.setText(formattedTime);
 
     }
+
     /**
      * Sets the window to fullscreen
      */
@@ -440,7 +569,7 @@ public class PrimaryController {
      * Detects a key pressed and then skips ahead based on the key
      */
     @FXML
-    private void arrowSkip() {
+    private void keyPresses() {
         Scene scene = slider.getScene();
 
         scene.setOnKeyPressed(event -> {
@@ -452,9 +581,11 @@ public class PrimaryController {
             if (event.getCode() == KeyCode.L) {
                 fastForward(SKIPSEC);
             }
+            // If K is pressed play video
             if (event.getCode() == KeyCode.K) {
                 buttonPlay();
             }
+            // If F is pressed toggle fullscreen
             if (event.getCode() == KeyCode.F) {
                 toggleFullScreen();
             }
@@ -516,58 +647,6 @@ public class PrimaryController {
 
         // Checks if video needs to loop
         checkLoop();
-    }
-
-    /**
-     * Helper function to assist in skipping backward a given amount of seconds
-     *
-     * @param sec
-     */
-    public void rewind(int sec) {
-        if (slider.getValue() >= sec) {
-            // Goes back ten seconds
-            setTime(slider.getValue() - sec);
-        } else /* Case 2: not normal */ {
-            // Goes back to start
-            setTime(START);
-        }
-    }
-
-    /**
-     * Helper function to assist in skipping forward a given amount of seconds
-     *
-     * @param sec
-     */
-    public void fastForward(int sec) {
-        double endTime = getEndTime();
-        // Case 1: normal
-        if (slider.getValue() <= endTime - sec) {
-            // Goes forward ten seconds
-            setTime(slider.getValue() + sec);
-        } else /* Case 2: not normal */ {
-            // Goes to end
-            setTime(endTime);
-        }
-    }
-
-    /**
-     * Change the hue of the video. This is linked to the hue slider in the FXML
-     * file.
-     */
-    @FXML
-    private void changeHue() {
-        double hueValue = hueSlider.getValue(); // Range: -1 to 1
-        colorAdjust.setHue(hueValue);
-    }
-
-    /**
-     * Resets the hue of the video to 0.0 (default)
-     * This is linked to the reset button in the FXML file.
-     */
-    @FXML
-    private void resetHue() {
-        hueSlider.setValue(0.0);
-        colorAdjust.setHue(0.0);
     }
 
     // -------------------------------PATH FUNCTIONS-------------------------------
