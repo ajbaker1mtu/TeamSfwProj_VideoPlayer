@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
@@ -649,6 +650,20 @@ public class PrimaryController {
         checkLoop();
     }
 
+    /**
+     * Shows the help menu **TODO**: Anyone can change the text to be more helpful
+     */
+    @FXML
+    private void showHelp() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Help");
+        alert.setHeaderText("How to Use the Video Player");
+        alert.setContentText("• Click 'Select Video File' to go back and select a file.\n" +
+                             "• Use the playback controls to play, pause, and skip through the video.\n" +
+                             "• Settings allow volume, mute, loop, adust speed, and filter control.\n" +
+                             "• Fullscreen button toggles fullscreen mode. (escape to exit fullscreen)");
+        alert.showAndWait();
+    }
     // -------------------------------PATH FUNCTIONS-------------------------------
     /**
      * Sets path of selected file to current path of the player

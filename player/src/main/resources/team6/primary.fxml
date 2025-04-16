@@ -23,7 +23,26 @@
 
 <VBox alignment="CENTER" onKeyPressed="#keyPresses" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team6.PrimaryController">
    <children>
-      <Label style="-fx-text-fill: #ffffff;" text="Video Player" textFill="WHITE" />
+   
+      <!-- Top-left Help button -->
+      <HBox alignment="TOP_LEFT" spacing="10.0">
+         <children>
+            <Button text="Help" onAction="#showHelp">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </HBox>
+
+   <!-- Centered Title -->
+      <HBox alignment="CENTER">
+         <children>
+            <Label style="-fx-text-fill: #ffffff;" text="Video Player" />
+         </children>
+      </HBox>
+      
+      <!-- -->
       <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Select Video File">
          <cursor>
             <Cursor fx:constant="HAND" />

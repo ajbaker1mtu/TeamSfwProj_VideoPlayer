@@ -25,7 +25,14 @@
       <Button fx:id="openfilebutton" mnemonicParsing="false" onAction="#openFile" text="Open Video File">
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></Button>
+         </cursor>
+      </Button>
+      <!-- Help Button -->
+      <Button text="Help" onAction="#showHelp">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

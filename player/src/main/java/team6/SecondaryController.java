@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -148,6 +149,21 @@ public class SecondaryController {
     }
 
     // -------------------------------FXML FUNCTIONS-------------------------------
+
+    /**
+     * Shows the help menu **TODO**: Anyone can change the text to be more helpful
+     */
+    @FXML
+    private void showHelp() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Help");
+        alert.setHeaderText("How to Select a Video");
+        alert.setContentText("• Use the dropdown to select a recent video.\n" +
+                            "• Or click 'Open Video File' to browse.\n" +
+                             "• Then click 'Play Video' to launch the player.");
+        alert.showAndWait();
+    }
+
     /**
      * Switches view to PrimaryController
      * 
