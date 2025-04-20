@@ -2,6 +2,8 @@ package team6;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.FileReader;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -22,6 +24,12 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonObject;
 
 public class PrimaryController {
 
@@ -104,7 +112,10 @@ public class PrimaryController {
     private static String current_path = null;
 
     // Loop on/off boolean
-    private boolean loop = false;
+    private static boolean loop = false;
+
+    // Volume variable
+    private static double volumeNum = 1.0;
 
     // ColorAdjust effect for hue adjustment
     private ColorAdjust colorAdjust = new ColorAdjust();
@@ -126,6 +137,7 @@ public class PrimaryController {
         // Gets video file
         currentMedia = new Media(new File(current_path).toURI().toASCIIString());
         mediaplayer = new MediaPlayer(currentMedia);
+        mediaplayer.setVolume(volumeNum);
 
         mediaview.setMediaPlayer(mediaplayer);
 
@@ -282,6 +294,8 @@ public class PrimaryController {
         muteCheckBox.setOnAction(event -> {
             mute();
         });
+
+        volume.setValue(volumeNum);
     }
 
     /**
@@ -298,10 +312,16 @@ public class PrimaryController {
         loopCheckMenuItem.setOnAction(event -> {
             loop = !loop;
 
+            //Update json file
+            if(SecondaryController.USE_JSON) {
+                updateLoopVolume();
+            }
+
             // Checks if looping can occur
             checkLoop();
         });
 
+        loopCheckMenuItem.setSelected(loop);
     }
 
     /**
@@ -473,6 +493,10 @@ public class PrimaryController {
     private void changeVolume() {
         // The slider interacts good when squared
         mediaplayer.setVolume(volume.getValue());
+        volumeNum = volume.getValue();
+        if(SecondaryController.USE_JSON) {
+            updateLoopVolume();
+        }
     }
 
     /**
@@ -681,5 +705,32 @@ public class PrimaryController {
      */
     public static String getPath() {
         return current_path;
+    }
+
+    // volume setter
+    public static void setVolume(double vol) {
+        volumeNum = vol;
+    }
+
+    // loop setter
+    public static void setLoop(boolean l) {
+        loop = l;
+    }
+
+    // update volume and loop settings in json file
+    private void updateLoopVolume() {
+        // Update loop and volume in JSON file
+        try (FileReader r = new FileReader(SecondaryController.JSON_FILE)) {
+            // Load volume and loop
+            JsonObject mainObject = JsonParser.parseReader(r).getAsJsonObject();
+            mainObject.add("volume", new JsonPrimitive(volumeNum));
+            mainObject.add("loop",new JsonPrimitive(loop));
+    
+            // Write new values to JSON file
+            try (FileWriter fw = new FileWriter(SecondaryController.JSON_FILE)) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().serializeSpecialFloatingPointValues().create();
+                gson.toJson(mainObject,fw);
+            } catch(IOException e) {e.printStackTrace();}
+        } catch(IOException e) {e.printStackTrace();}
     }
 }

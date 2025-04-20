@@ -41,9 +41,9 @@ public class SecondaryController {
     private static final int FIRST_FILE_INDEX = 1;
 
     // Whether or not to use the JSON system
-    private static final boolean USE_JSON = false;
+    public static final boolean USE_JSON = false;
     // The JSON file's path
-    private static final String JSON_FILE = "player\\src\\main\\java\\team6\\config.json";
+    public static final String JSON_FILE = "player\\src\\main\\java\\team6\\config.json";
 
     // --------------------------------FXML ELEMENTS--------------------------------
     // Dropdown menu for recently opened files
@@ -259,6 +259,14 @@ public class SecondaryController {
             jr.nextName();
             INITIAL_PATH = jr.nextString();
 
+            // Get volume
+            jr.nextName();
+            PrimaryController.setVolume(jr.nextDouble());
+
+            // Get Loop
+            jr.nextName();
+            PrimaryController.setLoop(jr.nextBoolean());
+
             // Get recent videos and add them to displayVideos
             jr.nextName();
             jr.beginArray();
@@ -292,11 +300,14 @@ public class SecondaryController {
             // Add new video to array
             mainArray.add(newFileEntry);
             mainArray.addAll(videoArray);
+            if(mainArray.size() > 50) {
+                mainArray.remove(49);
+            }
             mainObject.add("recent videos",mainArray);
     
             // Write new array to JSON file
             try (FileWriter fw = new FileWriter(JSON_FILE)) {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                Gson gson = new GsonBuilder().setPrettyPrinting().serializeSpecialFloatingPointValues().create();
                 gson.toJson(mainObject,fw);
             } catch(IOException e) {e.printStackTrace();}
         } catch(IOException e) {e.printStackTrace();}
